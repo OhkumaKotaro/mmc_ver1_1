@@ -1,0 +1,808 @@
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"function.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.setIrledPwm,"ax",%progbits
+  18              		.align	1
+  19              		.global	setIrledPwm
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	setIrledPwm:
+  26              	.LFB126:
+  27              		.file 1 "Src/function.c"
+   1:Src/function.c **** #include "function.h"
+   2:Src/function.c **** // peripheeral
+   3:Src/function.c **** #include "stm32f4xx_hal.h"
+   4:Src/function.c **** #include "adc.h"
+   5:Src/function.c **** #include "tim.h"
+   6:Src/function.c **** #include "spi.h"
+   7:Src/function.c **** #include "main.h"
+   8:Src/function.c **** #include "gpio.h"
+   9:Src/function.c **** 
+  10:Src/function.c **** //common
+  11:Src/function.c **** 
+  12:Src/function.c **** #define OFF_VALUE 0
+  13:Src/function.c **** #define LEFT_VALUE 1
+  14:Src/function.c **** #define RIGHT_VALUE 2
+  15:Src/function.c **** #define FINISH_CONVERT 3
+  16:Src/function.c **** 
+  17:Src/function.c **** #define true 1
+  18:Src/function.c **** #define false 0
+  19:Src/function.c **** 
+  20:Src/function.c **** static uint8_t ctr_irled = 0;
+  21:Src/function.c **** 
+  22:Src/function.c **** ///////////////////////////////////////////////////////////////////////
+  23:Src/function.c **** // able ir led
+  24:Src/function.c **** // [argument] ired 1:paluse emit ON 0:OFF
+  25:Src/function.c **** // [Substitutiong] nothing
+  26:Src/function.c **** // [return] nothing
+  27:Src/function.c **** ///////////////////////////////////////////////////////////////////////
+  28:Src/function.c **** void setIrledPwm( uint8_t able )
+  29:Src/function.c **** {
+  28              		.loc 1 29 0
+  29              		.cfi_startproc
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 2
+
+
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  30:Src/function.c **** 	ctr_irled = able;
+  34              		.loc 1 30 0
+  35 0000 014B     		ldr	r3, .L2
+  36 0002 1870     		strb	r0, [r3]
+  31:Src/function.c **** }
+  37              		.loc 1 31 0
+  38 0004 7047     		bx	lr
+  39              	.L3:
+  40 0006 00BF     		.align	2
+  41              	.L2:
+  42 0008 00000000 		.word	.LANCHOR0
+  43              		.cfi_endproc
+  44              	.LFE126:
+  46              		.section	.text.setSensorConstant,"ax",%progbits
+  47              		.align	1
+  48              		.global	setSensorConstant
+  49              		.syntax unified
+  50              		.thumb
+  51              		.thumb_func
+  52              		.fpu fpv4-sp-d16
+  54              	setSensorConstant:
+  55              	.LFB127:
+  32:Src/function.c **** 
+  33:Src/function.c **** 
+  34:Src/function.c **** void setSensorConstant( sensor_t *sen, int16_t reference, int16_t threshold )
+  35:Src/function.c **** {
+  56              		.loc 1 35 0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60              		@ link register save eliminated.
+  61              	.LVL1:
+  36:Src/function.c ****   sen->reference = reference;
+  62              		.loc 1 36 0
+  63 0000 8180     		strh	r1, [r0, #4]	@ movhi
+  37:Src/function.c ****   sen->threshold = threshold;
+  64              		.loc 1 37 0
+  65 0002 C280     		strh	r2, [r0, #6]	@ movhi
+  38:Src/function.c **** }
+  66              		.loc 1 38 0
+  67 0004 7047     		bx	lr
+  68              		.cfi_endproc
+  69              	.LFE127:
+  71              		.section	.text.update_sensor_data,"ax",%progbits
+  72              		.align	1
+  73              		.global	update_sensor_data
+  74              		.syntax unified
+  75              		.thumb
+  76              		.thumb_func
+  77              		.fpu fpv4-sp-d16
+  79              	update_sensor_data:
+  80              	.LFB128:
+  39:Src/function.c **** 
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 3
+
+
+  40:Src/function.c **** void update_sensor_data( void )
+  41:Src/function.c **** {
+  81              		.loc 1 41 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              		@ link register save eliminated.
+  42:Src/function.c **** 
+  43:Src/function.c ****   sen_front.now = ( sen_fl.now + sen_fr.now ) / 2;
+  86              		.loc 1 43 0
+  87 0000 1A4B     		ldr	r3, .L13
+  88 0002 B3F90030 		ldrsh	r3, [r3]
+  89 0006 1A4A     		ldr	r2, .L13+4
+  90 0008 B2F90020 		ldrsh	r2, [r2]
+  91 000c 1344     		add	r3, r3, r2
+  92 000e 03EBD373 		add	r3, r3, r3, lsr #31
+  93 0012 43F34F03 		sbfx	r3, r3, #1, #16
+  94 0016 174A     		ldr	r2, .L13+8
+  95 0018 1380     		strh	r3, [r2]	@ movhi
+  44:Src/function.c **** 
+  45:Src/function.c ****   if ( sen_front.now < sen_front.threshold ){
+  96              		.loc 1 45 0
+  97 001a B2F90620 		ldrsh	r2, [r2, #6]
+  98 001e 9342     		cmp	r3, r2
+  99 0020 17DA     		bge	.L6
+  46:Src/function.c ****     sen_front.is_wall = false;
+ 100              		.loc 1 46 0
+ 101 0022 144B     		ldr	r3, .L13+8
+ 102 0024 0022     		movs	r2, #0
+ 103 0026 1A73     		strb	r2, [r3, #12]
+ 104              	.L7:
+  47:Src/function.c ****   } else {
+  48:Src/function.c ****     sen_front.is_wall = true;
+  49:Src/function.c ****   }
+  50:Src/function.c **** 
+  51:Src/function.c ****   if ( sen_l.now < sen_l.threshold ){
+ 105              		.loc 1 51 0
+ 106 0028 134B     		ldr	r3, .L13+12
+ 107 002a B3F90020 		ldrsh	r2, [r3]
+ 108 002e B3F90630 		ldrsh	r3, [r3, #6]
+ 109 0032 9A42     		cmp	r2, r3
+ 110 0034 11DA     		bge	.L8
+  52:Src/function.c ****     sen_l.is_wall = false;
+ 111              		.loc 1 52 0
+ 112 0036 104B     		ldr	r3, .L13+12
+ 113 0038 0022     		movs	r2, #0
+ 114 003a 1A73     		strb	r2, [r3, #12]
+ 115              	.L9:
+  53:Src/function.c ****   } else {
+  54:Src/function.c ****     sen_l.is_wall = true;
+  55:Src/function.c ****   }
+  56:Src/function.c **** 
+  57:Src/function.c ****   if ( sen_r.now < sen_r.threshold ){
+ 116              		.loc 1 57 0
+ 117 003c 0F4B     		ldr	r3, .L13+16
+ 118 003e B3F90020 		ldrsh	r2, [r3]
+ 119 0042 B3F90630 		ldrsh	r3, [r3, #6]
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 4
+
+
+ 120 0046 9A42     		cmp	r2, r3
+ 121 0048 0BDB     		blt	.L12
+  58:Src/function.c ****     sen_r.is_wall = false;
+  59:Src/function.c ****   } else {
+  60:Src/function.c ****     sen_r.is_wall = true;
+ 122              		.loc 1 60 0
+ 123 004a 0C4B     		ldr	r3, .L13+16
+ 124 004c 0122     		movs	r2, #1
+ 125 004e 1A73     		strb	r2, [r3, #12]
+  61:Src/function.c ****   }
+  62:Src/function.c **** }
+ 126              		.loc 1 62 0
+ 127 0050 7047     		bx	lr
+ 128              	.L6:
+  48:Src/function.c ****   }
+ 129              		.loc 1 48 0
+ 130 0052 084B     		ldr	r3, .L13+8
+ 131 0054 0122     		movs	r2, #1
+ 132 0056 1A73     		strb	r2, [r3, #12]
+ 133 0058 E6E7     		b	.L7
+ 134              	.L8:
+  54:Src/function.c ****   }
+ 135              		.loc 1 54 0
+ 136 005a 074B     		ldr	r3, .L13+12
+ 137 005c 0122     		movs	r2, #1
+ 138 005e 1A73     		strb	r2, [r3, #12]
+ 139 0060 ECE7     		b	.L9
+ 140              	.L12:
+  58:Src/function.c ****   } else {
+ 141              		.loc 1 58 0
+ 142 0062 064B     		ldr	r3, .L13+16
+ 143 0064 0022     		movs	r2, #0
+ 144 0066 1A73     		strb	r2, [r3, #12]
+ 145 0068 7047     		bx	lr
+ 146              	.L14:
+ 147 006a 00BF     		.align	2
+ 148              	.L13:
+ 149 006c 00000000 		.word	sen_fl
+ 150 0070 00000000 		.word	sen_fr
+ 151 0074 00000000 		.word	sen_front
+ 152 0078 00000000 		.word	sen_l
+ 153 007c 00000000 		.word	sen_r
+ 154              		.cfi_endproc
+ 155              	.LFE128:
+ 157              		.section	.text.adcStart,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	adcStart
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 163              		.fpu fpv4-sp-d16
+ 165              	adcStart:
+ 166              	.LFB129:
+  63:Src/function.c **** 
+  64:Src/function.c **** void adcStart( void )
+  65:Src/function.c **** {
+ 167              		.loc 1 65 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 5
+
+
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171 0000 08B5     		push	{r3, lr}
+ 172              	.LCFI0:
+ 173              		.cfi_def_cfa_offset 8
+ 174              		.cfi_offset 3, -8
+ 175              		.cfi_offset 14, -4
+  66:Src/function.c ****   setIrledPwm( IRLED_ON );
+ 176              		.loc 1 66 0
+ 177 0002 0120     		movs	r0, #1
+ 178 0004 FFF7FEFF 		bl	setIrledPwm
+ 179              	.LVL2:
+  67:Src/function.c ****   adc_counter = 0;
+ 180              		.loc 1 67 0
+ 181 0008 044B     		ldr	r3, .L17
+ 182 000a 0022     		movs	r2, #0
+ 183 000c 1A80     		strh	r2, [r3]	@ movhi
+  68:Src/function.c ****   HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+ 184              		.loc 1 68 0
+ 185 000e 1022     		movs	r2, #16
+ 186 0010 0349     		ldr	r1, .L17+4
+ 187 0012 0448     		ldr	r0, .L17+8
+ 188 0014 FFF7FEFF 		bl	HAL_ADC_Start_DMA
+ 189              	.LVL3:
+  69:Src/function.c **** }
+ 190              		.loc 1 69 0
+ 191 0018 08BD     		pop	{r3, pc}
+ 192              	.L18:
+ 193 001a 00BF     		.align	2
+ 194              	.L17:
+ 195 001c 00000000 		.word	adc_counter
+ 196 0020 00000000 		.word	ADCBuff
+ 197 0024 00000000 		.word	hadc1
+ 198              		.cfi_endproc
+ 199              	.LFE129:
+ 201              		.section	.text.adcCheckConvert,"ax",%progbits
+ 202              		.align	1
+ 203              		.global	adcCheckConvert
+ 204              		.syntax unified
+ 205              		.thumb
+ 206              		.thumb_func
+ 207              		.fpu fpv4-sp-d16
+ 209              	adcCheckConvert:
+ 210              	.LFB130:
+  70:Src/function.c **** /*
+  71:Src/function.c **** void adcEnd( void )
+  72:Src/function.c **** {
+  73:Src/function.c ****   setIrledPwm( IRLED_OFF );
+  74:Src/function.c **** }
+  75:Src/function.c **** */
+  76:Src/function.c **** void adcCheckConvert( void )
+  77:Src/function.c **** {
+ 211              		.loc 1 77 0
+ 212              		.cfi_startproc
+ 213              		@ args = 0, pretend = 0, frame = 0
+ 214              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 6
+
+
+ 215 0000 08B5     		push	{r3, lr}
+ 216              	.LCFI1:
+ 217              		.cfi_def_cfa_offset 8
+ 218              		.cfi_offset 3, -8
+ 219              		.cfi_offset 14, -4
+  78:Src/function.c ****   if ( adc_counter == FINISH_CONVERT && ctr_irled == 1 ){
+ 220              		.loc 1 78 0
+ 221 0002 0A4B     		ldr	r3, .L23
+ 222 0004 B3F90030 		ldrsh	r3, [r3]
+ 223 0008 032B     		cmp	r3, #3
+ 224 000a 00D0     		beq	.L22
+ 225              	.L19:
+  79:Src/function.c ****     update_sensor_data();
+  80:Src/function.c ****     adc_counter = 0;
+  81:Src/function.c ****     HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+  82:Src/function.c ****   }
+  83:Src/function.c **** }
+ 226              		.loc 1 83 0
+ 227 000c 08BD     		pop	{r3, pc}
+ 228              	.L22:
+  78:Src/function.c ****   if ( adc_counter == FINISH_CONVERT && ctr_irled == 1 ){
+ 229              		.loc 1 78 0 discriminator 1
+ 230 000e 084B     		ldr	r3, .L23+4
+ 231 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 232 0012 012B     		cmp	r3, #1
+ 233 0014 FAD1     		bne	.L19
+  79:Src/function.c ****     update_sensor_data();
+ 234              		.loc 1 79 0
+ 235 0016 FFF7FEFF 		bl	update_sensor_data
+ 236              	.LVL4:
+  80:Src/function.c ****     HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+ 237              		.loc 1 80 0
+ 238 001a 044B     		ldr	r3, .L23
+ 239 001c 0022     		movs	r2, #0
+ 240 001e 1A80     		strh	r2, [r3]	@ movhi
+  81:Src/function.c ****   }
+ 241              		.loc 1 81 0
+ 242 0020 1022     		movs	r2, #16
+ 243 0022 0449     		ldr	r1, .L23+8
+ 244 0024 0448     		ldr	r0, .L23+12
+ 245 0026 FFF7FEFF 		bl	HAL_ADC_Start_DMA
+ 246              	.LVL5:
+ 247              		.loc 1 83 0
+ 248 002a EFE7     		b	.L19
+ 249              	.L24:
+ 250              		.align	2
+ 251              	.L23:
+ 252 002c 00000000 		.word	adc_counter
+ 253 0030 00000000 		.word	.LANCHOR0
+ 254 0034 00000000 		.word	ADCBuff
+ 255 0038 00000000 		.word	hadc1
+ 256              		.cfi_endproc
+ 257              	.LFE130:
+ 259              		.section	.text.getADSensor,"ax",%progbits
+ 260              		.align	1
+ 261              		.global	getADSensor
+ 262              		.syntax unified
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 7
+
+
+ 263              		.thumb
+ 264              		.thumb_func
+ 265              		.fpu fpv4-sp-d16
+ 267              	getADSensor:
+ 268              	.LFB131:
+  84:Src/function.c **** 
+  85:Src/function.c **** // DMA の変換式を記載
+  86:Src/function.c **** void getADSensor( int16_t *adcount )
+  87:Src/function.c **** {
+ 269              		.loc 1 87 0
+ 270              		.cfi_startproc
+ 271              		@ args = 0, pretend = 0, frame = 8
+ 272              		@ frame_needed = 0, uses_anonymous_args = 0
+ 273              	.LVL6:
+ 274 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 275              	.LCFI2:
+ 276              		.cfi_def_cfa_offset 20
+ 277              		.cfi_offset 4, -20
+ 278              		.cfi_offset 5, -16
+ 279              		.cfi_offset 6, -12
+ 280              		.cfi_offset 7, -8
+ 281              		.cfi_offset 14, -4
+ 282 0002 83B0     		sub	sp, sp, #12
+ 283              	.LCFI3:
+ 284              		.cfi_def_cfa_offset 32
+ 285 0004 0446     		mov	r4, r0
+  88:Src/function.c ****   volatile int i;
+  89:Src/function.c ****   switch( *adcount ) {
+ 286              		.loc 1 89 0
+ 287 0006 B0F90030 		ldrsh	r3, [r0]
+ 288 000a 012B     		cmp	r3, #1
+ 289 000c 2DD0     		beq	.L27
+ 290 000e 022B     		cmp	r3, #2
+ 291 0010 6FD0     		beq	.L28
+ 292 0012 0BB1     		cbz	r3, .L35
+ 293              	.LVL7:
+ 294              	.L25:
+  90:Src/function.c ****     case OFF_VALUE:
+  91:Src/function.c ****       HAL_ADC_Stop_DMA( &hadc1 );
+  92:Src/function.c ****       ADCOffData[0] = ADCBuff[0];
+  93:Src/function.c ****       ADCOffData[1] = ADCBuff[1];
+  94:Src/function.c ****       ADCOffData[2] = ADCBuff[2];
+  95:Src/function.c ****       ADCOffData[3] = ADCBuff[3];
+  96:Src/function.c **** 
+  97:Src/function.c ****       HAL_GPIO_WritePin( paluse2_GPIO_Port, paluse2_Pin ,GPIO_PIN_SET );
+  98:Src/function.c ****       HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_SET );
+  99:Src/function.c ****       for( i = 0; i < 100; i++ ){
+ 100:Src/function.c **** 
+ 101:Src/function.c ****       }
+ 102:Src/function.c **** 
+ 103:Src/function.c ****       *adcount = LEFT_VALUE;
+ 104:Src/function.c **** 
+ 105:Src/function.c ****       HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+ 106:Src/function.c ****       break;
+ 107:Src/function.c **** 
+ 108:Src/function.c ****     case LEFT_VALUE:
+ 109:Src/function.c ****       HAL_GPIO_WritePin( paluse2_GPIO_Port, paluse2_Pin ,GPIO_PIN_RESET );
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 8
+
+
+ 110:Src/function.c ****       HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_RESET );
+ 111:Src/function.c ****       HAL_ADC_Stop_DMA( &hadc1 );
+ 112:Src/function.c **** 
+ 113:Src/function.c ****       ADCOntData[2] = ADCBuff[2];
+ 114:Src/function.c ****       ADCOntData[3] = ADCBuff[3];
+ 115:Src/function.c **** 
+ 116:Src/function.c ****       sen_l.diff = sen_l.now - (ADCOntData[2] - ADCOffData[2]);
+ 117:Src/function.c ****       sen_l.now = ADCOntData[2] - ADCOffData[2];
+ 118:Src/function.c **** 
+ 119:Src/function.c ****       sen_fl.diff = sen_fl.now - (ADCOntData[3] - ADCOffData[3]);
+ 120:Src/function.c ****       sen_fl.now = ADCOntData[3] - ADCOffData[3];
+ 121:Src/function.c **** 
+ 122:Src/function.c ****       HAL_GPIO_WritePin( paluse0_GPIO_Port, paluse0_Pin ,GPIO_PIN_SET );
+ 123:Src/function.c ****       HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_SET );
+ 124:Src/function.c ****       for( i = 0; i < 100; i++ ){
+ 125:Src/function.c **** 
+ 126:Src/function.c ****       }
+ 127:Src/function.c **** 
+ 128:Src/function.c ****       *adcount = RIGHT_VALUE;
+ 129:Src/function.c **** 
+ 130:Src/function.c ****       HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+ 131:Src/function.c ****       break;
+ 132:Src/function.c **** 
+ 133:Src/function.c ****     case RIGHT_VALUE:
+ 134:Src/function.c ****       HAL_GPIO_WritePin( paluse0_GPIO_Port, paluse0_Pin ,GPIO_PIN_RESET );
+ 135:Src/function.c ****       HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_RESET );
+ 136:Src/function.c ****       HAL_ADC_Stop_DMA( &hadc1 );
+ 137:Src/function.c **** 
+ 138:Src/function.c ****       ADCOntData[0] = ADCBuff[0];
+ 139:Src/function.c ****       ADCOntData[1] = ADCBuff[1];
+ 140:Src/function.c **** 
+ 141:Src/function.c ****       sen_fr.diff = sen_fr.now - (ADCOntData[0] - ADCOffData[0]);
+ 142:Src/function.c ****       sen_fr.now = ADCOntData[0] - ADCOffData[0];
+ 143:Src/function.c **** 
+ 144:Src/function.c ****       sen_r.diff = sen_r.now - (ADCOntData[1] - ADCOffData[1]);
+ 145:Src/function.c ****       sen_r.now = ADCOntData[1] - ADCOffData[1];
+ 146:Src/function.c **** 
+ 147:Src/function.c ****       *adcount = FINISH_CONVERT;
+ 148:Src/function.c ****       break;
+ 149:Src/function.c **** 
+ 150:Src/function.c ****     default:
+ 151:Src/function.c ****       break;
+ 152:Src/function.c ****   }
+ 153:Src/function.c **** }
+ 295              		.loc 1 153 0
+ 296 0014 03B0     		add	sp, sp, #12
+ 297              	.LCFI4:
+ 298              		.cfi_remember_state
+ 299              		.cfi_def_cfa_offset 20
+ 300              		@ sp needed
+ 301 0016 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 302              	.LVL8:
+ 303              	.L35:
+ 304              	.LCFI5:
+ 305              		.cfi_restore_state
+  91:Src/function.c ****       ADCOffData[0] = ADCBuff[0];
+ 306              		.loc 1 91 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 9
+
+
+ 307 0018 4C48     		ldr	r0, .L36
+ 308              	.LVL9:
+ 309 001a FFF7FEFF 		bl	HAL_ADC_Stop_DMA
+ 310              	.LVL10:
+  92:Src/function.c ****       ADCOffData[1] = ADCBuff[1];
+ 311              		.loc 1 92 0
+ 312 001e 4C4A     		ldr	r2, .L36+4
+ 313 0020 1188     		ldrh	r1, [r2]
+ 314 0022 4C4B     		ldr	r3, .L36+8
+ 315 0024 1980     		strh	r1, [r3]	@ movhi
+  93:Src/function.c ****       ADCOffData[2] = ADCBuff[2];
+ 316              		.loc 1 93 0
+ 317 0026 5188     		ldrh	r1, [r2, #2]
+ 318 0028 5980     		strh	r1, [r3, #2]	@ movhi
+  94:Src/function.c ****       ADCOffData[3] = ADCBuff[3];
+ 319              		.loc 1 94 0
+ 320 002a 9188     		ldrh	r1, [r2, #4]
+ 321 002c 9980     		strh	r1, [r3, #4]	@ movhi
+  95:Src/function.c **** 
+ 322              		.loc 1 95 0
+ 323 002e D288     		ldrh	r2, [r2, #6]
+ 324 0030 DA80     		strh	r2, [r3, #6]	@ movhi
+  97:Src/function.c ****       HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_SET );
+ 325              		.loc 1 97 0
+ 326 0032 494D     		ldr	r5, .L36+12
+ 327 0034 0122     		movs	r2, #1
+ 328 0036 0421     		movs	r1, #4
+ 329 0038 2846     		mov	r0, r5
+ 330 003a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 331              	.LVL11:
+  98:Src/function.c ****       for( i = 0; i < 100; i++ ){
+ 332              		.loc 1 98 0
+ 333 003e 0122     		movs	r2, #1
+ 334 0040 0821     		movs	r1, #8
+ 335 0042 2846     		mov	r0, r5
+ 336 0044 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 337              	.LVL12:
+  99:Src/function.c **** 
+ 338              		.loc 1 99 0
+ 339 0048 0023     		movs	r3, #0
+ 340 004a 0193     		str	r3, [sp, #4]
+ 341 004c 02E0     		b	.L30
+ 342              	.L31:
+  99:Src/function.c **** 
+ 343              		.loc 1 99 0 is_stmt 0 discriminator 3
+ 344 004e 019B     		ldr	r3, [sp, #4]
+ 345 0050 0133     		adds	r3, r3, #1
+ 346 0052 0193     		str	r3, [sp, #4]
+ 347              	.L30:
+  99:Src/function.c **** 
+ 348              		.loc 1 99 0 discriminator 1
+ 349 0054 019B     		ldr	r3, [sp, #4]
+ 350 0056 632B     		cmp	r3, #99
+ 351 0058 F9DD     		ble	.L31
+ 103:Src/function.c **** 
+ 352              		.loc 1 103 0 is_stmt 1
+ 353 005a 0123     		movs	r3, #1
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 10
+
+
+ 354 005c 2380     		strh	r3, [r4]	@ movhi
+ 105:Src/function.c ****       break;
+ 355              		.loc 1 105 0
+ 356 005e 1022     		movs	r2, #16
+ 357 0060 3B49     		ldr	r1, .L36+4
+ 358 0062 3A48     		ldr	r0, .L36
+ 359 0064 FFF7FEFF 		bl	HAL_ADC_Start_DMA
+ 360              	.LVL13:
+ 106:Src/function.c **** 
+ 361              		.loc 1 106 0
+ 362 0068 D4E7     		b	.L25
+ 363              	.LVL14:
+ 364              	.L27:
+ 109:Src/function.c ****       HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_RESET );
+ 365              		.loc 1 109 0
+ 366 006a 3B4D     		ldr	r5, .L36+12
+ 367 006c 0022     		movs	r2, #0
+ 368 006e 0421     		movs	r1, #4
+ 369 0070 2846     		mov	r0, r5
+ 370              	.LVL15:
+ 371 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 372              	.LVL16:
+ 110:Src/function.c ****       HAL_ADC_Stop_DMA( &hadc1 );
+ 373              		.loc 1 110 0
+ 374 0076 0022     		movs	r2, #0
+ 375 0078 0821     		movs	r1, #8
+ 376 007a 2846     		mov	r0, r5
+ 377 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 378              	.LVL17:
+ 111:Src/function.c **** 
+ 379              		.loc 1 111 0
+ 380 0080 3248     		ldr	r0, .L36
+ 381 0082 FFF7FEFF 		bl	HAL_ADC_Stop_DMA
+ 382              	.LVL18:
+ 113:Src/function.c ****       ADCOntData[3] = ADCBuff[3];
+ 383              		.loc 1 113 0
+ 384 0086 324B     		ldr	r3, .L36+4
+ 385 0088 9A88     		ldrh	r2, [r3, #4]
+ 386 008a 3449     		ldr	r1, .L36+16
+ 387 008c 8A80     		strh	r2, [r1, #4]	@ movhi
+ 114:Src/function.c **** 
+ 388              		.loc 1 114 0
+ 389 008e DB88     		ldrh	r3, [r3, #6]
+ 390 0090 CB80     		strh	r3, [r1, #6]	@ movhi
+ 116:Src/function.c ****       sen_l.now = ADCOntData[2] - ADCOffData[2];
+ 391              		.loc 1 116 0
+ 392 0092 3349     		ldr	r1, .L36+20
+ 393 0094 B1F900C0 		ldrsh	ip, [r1]
+ 394 0098 2E4E     		ldr	r6, .L36+8
+ 395 009a B788     		ldrh	r7, [r6, #4]
+ 396 009c B81A     		subs	r0, r7, r2
+ 397 009e 1CFA80F0 		uxtah	r0, ip, r0
+ 398 00a2 0881     		strh	r0, [r1, #8]	@ movhi
+ 117:Src/function.c **** 
+ 399              		.loc 1 117 0
+ 400 00a4 D21B     		subs	r2, r2, r7
+ 401 00a6 0A80     		strh	r2, [r1]	@ movhi
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 11
+
+
+ 119:Src/function.c ****       sen_fl.now = ADCOntData[3] - ADCOffData[3];
+ 402              		.loc 1 119 0
+ 403 00a8 2E4A     		ldr	r2, .L36+24
+ 404 00aa B2F90070 		ldrsh	r7, [r2]
+ 405 00ae F088     		ldrh	r0, [r6, #6]
+ 406 00b0 C11A     		subs	r1, r0, r3
+ 407 00b2 17FA81F1 		uxtah	r1, r7, r1
+ 408 00b6 1181     		strh	r1, [r2, #8]	@ movhi
+ 120:Src/function.c **** 
+ 409              		.loc 1 120 0
+ 410 00b8 1B1A     		subs	r3, r3, r0
+ 411 00ba 1380     		strh	r3, [r2]	@ movhi
+ 122:Src/function.c ****       HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_SET );
+ 412              		.loc 1 122 0
+ 413 00bc 0122     		movs	r2, #1
+ 414 00be 1146     		mov	r1, r2
+ 415 00c0 2846     		mov	r0, r5
+ 416 00c2 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 417              	.LVL19:
+ 123:Src/function.c ****       for( i = 0; i < 100; i++ ){
+ 418              		.loc 1 123 0
+ 419 00c6 0122     		movs	r2, #1
+ 420 00c8 0221     		movs	r1, #2
+ 421 00ca 2846     		mov	r0, r5
+ 422 00cc FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 423              	.LVL20:
+ 124:Src/function.c **** 
+ 424              		.loc 1 124 0
+ 425 00d0 0023     		movs	r3, #0
+ 426 00d2 0193     		str	r3, [sp, #4]
+ 427 00d4 02E0     		b	.L32
+ 428              	.L33:
+ 124:Src/function.c **** 
+ 429              		.loc 1 124 0 is_stmt 0 discriminator 3
+ 430 00d6 019B     		ldr	r3, [sp, #4]
+ 431 00d8 0133     		adds	r3, r3, #1
+ 432 00da 0193     		str	r3, [sp, #4]
+ 433              	.L32:
+ 124:Src/function.c **** 
+ 434              		.loc 1 124 0 discriminator 1
+ 435 00dc 019B     		ldr	r3, [sp, #4]
+ 436 00de 632B     		cmp	r3, #99
+ 437 00e0 F9DD     		ble	.L33
+ 128:Src/function.c **** 
+ 438              		.loc 1 128 0 is_stmt 1
+ 439 00e2 0223     		movs	r3, #2
+ 440 00e4 2380     		strh	r3, [r4]	@ movhi
+ 130:Src/function.c ****       break;
+ 441              		.loc 1 130 0
+ 442 00e6 1022     		movs	r2, #16
+ 443 00e8 1949     		ldr	r1, .L36+4
+ 444 00ea 1848     		ldr	r0, .L36
+ 445 00ec FFF7FEFF 		bl	HAL_ADC_Start_DMA
+ 446              	.LVL21:
+ 131:Src/function.c **** 
+ 447              		.loc 1 131 0
+ 448 00f0 90E7     		b	.L25
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 12
+
+
+ 449              	.LVL22:
+ 450              	.L28:
+ 134:Src/function.c ****       HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_RESET );
+ 451              		.loc 1 134 0
+ 452 00f2 194D     		ldr	r5, .L36+12
+ 453 00f4 0022     		movs	r2, #0
+ 454 00f6 0121     		movs	r1, #1
+ 455 00f8 2846     		mov	r0, r5
+ 456              	.LVL23:
+ 457 00fa FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 458              	.LVL24:
+ 135:Src/function.c ****       HAL_ADC_Stop_DMA( &hadc1 );
+ 459              		.loc 1 135 0
+ 460 00fe 0022     		movs	r2, #0
+ 461 0100 0221     		movs	r1, #2
+ 462 0102 2846     		mov	r0, r5
+ 463 0104 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 464              	.LVL25:
+ 136:Src/function.c **** 
+ 465              		.loc 1 136 0
+ 466 0108 1048     		ldr	r0, .L36
+ 467 010a FFF7FEFF 		bl	HAL_ADC_Stop_DMA
+ 468              	.LVL26:
+ 138:Src/function.c ****       ADCOntData[1] = ADCBuff[1];
+ 469              		.loc 1 138 0
+ 470 010e 104B     		ldr	r3, .L36+4
+ 471 0110 1A88     		ldrh	r2, [r3]
+ 472 0112 1249     		ldr	r1, .L36+16
+ 473 0114 0A80     		strh	r2, [r1]	@ movhi
+ 139:Src/function.c **** 
+ 474              		.loc 1 139 0
+ 475 0116 5B88     		ldrh	r3, [r3, #2]
+ 476 0118 4B80     		strh	r3, [r1, #2]	@ movhi
+ 141:Src/function.c ****       sen_fr.now = ADCOntData[0] - ADCOffData[0];
+ 477              		.loc 1 141 0
+ 478 011a 1349     		ldr	r1, .L36+28
+ 479 011c B1F90070 		ldrsh	r7, [r1]
+ 480 0120 0C4D     		ldr	r5, .L36+8
+ 481 0122 2E88     		ldrh	r6, [r5]
+ 482 0124 B01A     		subs	r0, r6, r2
+ 483 0126 17FA80F0 		uxtah	r0, r7, r0
+ 484 012a 0881     		strh	r0, [r1, #8]	@ movhi
+ 142:Src/function.c **** 
+ 485              		.loc 1 142 0
+ 486 012c 921B     		subs	r2, r2, r6
+ 487 012e 0A80     		strh	r2, [r1]	@ movhi
+ 144:Src/function.c ****       sen_r.now = ADCOntData[1] - ADCOffData[1];
+ 488              		.loc 1 144 0
+ 489 0130 0E4A     		ldr	r2, .L36+32
+ 490 0132 B2F90060 		ldrsh	r6, [r2]
+ 491 0136 6888     		ldrh	r0, [r5, #2]
+ 492 0138 C11A     		subs	r1, r0, r3
+ 493 013a 16FA81F1 		uxtah	r1, r6, r1
+ 494 013e 1181     		strh	r1, [r2, #8]	@ movhi
+ 145:Src/function.c **** 
+ 495              		.loc 1 145 0
+ 496 0140 1B1A     		subs	r3, r3, r0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 13
+
+
+ 497 0142 1380     		strh	r3, [r2]	@ movhi
+ 147:Src/function.c ****       break;
+ 498              		.loc 1 147 0
+ 499 0144 0323     		movs	r3, #3
+ 500 0146 2380     		strh	r3, [r4]	@ movhi
+ 501              		.loc 1 153 0
+ 502 0148 64E7     		b	.L25
+ 503              	.L37:
+ 504 014a 00BF     		.align	2
+ 505              	.L36:
+ 506 014c 00000000 		.word	hadc1
+ 507 0150 00000000 		.word	ADCBuff
+ 508 0154 00000000 		.word	ADCOffData
+ 509 0158 00080240 		.word	1073874944
+ 510 015c 00000000 		.word	ADCOntData
+ 511 0160 00000000 		.word	sen_l
+ 512 0164 00000000 		.word	sen_fl
+ 513 0168 00000000 		.word	sen_fr
+ 514 016c 00000000 		.word	sen_r
+ 515              		.cfi_endproc
+ 516              	.LFE131:
+ 518              		.section	.bss.ctr_irled,"aw",%nobits
+ 519              		.set	.LANCHOR0,. + 0
+ 522              	ctr_irled:
+ 523 0000 00       		.space	1
+ 524              		.text
+ 525              	.Letext0:
+ 526              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 527              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 528              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 529              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 530              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi
+ 531              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 532              		.file 8 "Inc/global.h"
+ 533              		.file 9 "Drivers/CMSIS/Include/core_cm4.h"
+ 534              		.file 10 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 535              		.file 11 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 536              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 537              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 538              		.file 14 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 539              		.file 15 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h"
+ 540              		.file 16 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 541              		.file 17 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 542              		.file 18 "Inc/adc.h"
+ 543              		.file 19 "Inc/tim.h"
+ 544              		.file 20 "Inc/spi.h"
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 function.c
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:18     .text.setIrledPwm:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:25     .text.setIrledPwm:00000000 setIrledPwm
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:42     .text.setIrledPwm:00000008 $d
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:47     .text.setSensorConstant:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:54     .text.setSensorConstant:00000000 setSensorConstant
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:72     .text.update_sensor_data:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:79     .text.update_sensor_data:00000000 update_sensor_data
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:149    .text.update_sensor_data:0000006c $d
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:158    .text.adcStart:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:165    .text.adcStart:00000000 adcStart
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:195    .text.adcStart:0000001c $d
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:202    .text.adcCheckConvert:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:209    .text.adcCheckConvert:00000000 adcCheckConvert
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:252    .text.adcCheckConvert:0000002c $d
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:260    .text.getADSensor:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:267    .text.getADSensor:00000000 getADSensor
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:506    .text.getADSensor:0000014c $d
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:522    .bss.ctr_irled:00000000 ctr_irled
+C:\Users\kotaro\AppData\Local\Temp\ccTRif2i.s:523    .bss.ctr_irled:00000000 $d
+
+UNDEFINED SYMBOLS
+sen_fl
+sen_fr
+sen_front
+sen_l
+sen_r
+HAL_ADC_Start_DMA
+adc_counter
+ADCBuff
+hadc1
+HAL_ADC_Stop_DMA
+HAL_GPIO_WritePin
+ADCOffData
+ADCOntData

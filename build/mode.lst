@@ -1,0 +1,827 @@
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mode.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Mode_select,"ax",%progbits
+  18              		.align	1
+  19              		.global	Mode_select
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	Mode_select:
+  26              	.LFB126:
+  27              		.file 1 "Src/mode.c"
+   1:Src/mode.c    **** #include "mode.h"
+   2:Src/mode.c    **** #include "global.h"
+   3:Src/mode.c    **** #include "gpio.h"
+   4:Src/mode.c    **** #include "tim.h"
+   5:Src/mode.c    **** #include "motion.h"
+   6:Src/mode.c    **** #include "control.h"
+   7:Src/mode.c    **** #include "spi.h"
+   8:Src/mode.c    **** #include "adc.h"
+   9:Src/mode.c    **** #include "maze.h"
+  10:Src/mode.c    **** #include "function.h"
+  11:Src/mode.c    **** 
+  12:Src/mode.c    **** maze_t maze;
+  13:Src/mode.c    **** 
+  14:Src/mode.c    **** 
+  15:Src/mode.c    **** /****************************************************************************************
+  16:Src/mode.c    ****  * outline  : return mode nomber
+  17:Src/mode.c    ****  * argument : void
+  18:Src/mode.c    ****  * return   : mode nomber 
+  19:Src/mode.c    **** ********************************************************************************************/
+  20:Src/mode.c    **** int8_t Mode_select(void){
+  28              		.loc 1 20 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 14, -4
+  37              	.LVL0:
+  21:Src/mode.c    ****     int8_t mode=0;
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 2
+
+
+  22:Src/mode.c    ****     printf("%d\r",mode);
+  38              		.loc 1 22 0
+  39 0002 0021     		movs	r1, #0
+  40 0004 2248     		ldr	r0, .L13
+  41 0006 FFF7FEFF 		bl	printf
+  42              	.LVL1:
+  21:Src/mode.c    ****     int8_t mode=0;
+  43              		.loc 1 21 0
+  44 000a 0024     		movs	r4, #0
+  45 000c 1FE0     		b	.L7
+  46              	.LVL2:
+  47              	.L3:
+  23:Src/mode.c    ****     while(1){
+  24:Src/mode.c    ****         if((int16_t)enc.distance_l > 30 || (int16_t)enc.distance_l < -30){
+  25:Src/mode.c    ****             if((int16_t)enc.distance_l > 30){
+  26:Src/mode.c    ****                 mode++;
+  27:Src/mode.c    ****             }else if((int16_t)enc.distance_l < -30){
+  48              		.loc 1 27 0
+  49 000e 13F11E0F 		cmn	r3, #30
+  50 0012 2DDA     		bge	.L4
+  28:Src/mode.c    ****                 mode--;
+  51              		.loc 1 28 0
+  52 0014 013C     		subs	r4, r4, #1
+  53              	.LVL3:
+  54 0016 64B2     		sxtb	r4, r4
+  55              	.LVL4:
+  56 0018 2AE0     		b	.L4
+  57              	.L8:
+  29:Src/mode.c    ****             }
+  30:Src/mode.c    ****             if(mode > 7){
+  31:Src/mode.c    ****                 mode = 0;
+  58              		.loc 1 31 0
+  59 001a 0024     		movs	r4, #0
+  60              	.LVL5:
+  61              	.L5:
+  32:Src/mode.c    ****             }else if(mode < 0){
+  33:Src/mode.c    ****                 mode = 7;
+  34:Src/mode.c    ****             }
+  35:Src/mode.c    ****             enc.distance_l = 0;
+  62              		.loc 1 35 0
+  63 001c 1D4B     		ldr	r3, .L13+4
+  64 001e 0022     		movs	r2, #0
+  65 0020 DA61     		str	r2, [r3, #28]	@ float
+  36:Src/mode.c    ****             Output_Buzzer(170-10*mode);
+  66              		.loc 1 36 0
+  67 0022 C4EB4413 		rsb	r3, r4, r4, lsl #5
+  68 0026 C4EB8303 		rsb	r3, r4, r3, lsl #2
+  69 002a 5800     		lsls	r0, r3, #1
+  70 002c C0B2     		uxtb	r0, r0
+  71 002e 5638     		subs	r0, r0, #86
+  72 0030 00F0FE00 		and	r0, r0, #254
+  73 0034 FFF7FEFF 		bl	Output_Buzzer
+  74              	.LVL6:
+  75              	.L2:
+  37:Src/mode.c    ****         }
+  38:Src/mode.c    ****         if(Push()==ON){
+  76              		.loc 1 38 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 3
+
+
+  77 0038 FFF7FEFF 		bl	Push
+  78              	.LVL7:
+  79 003c 0128     		cmp	r0, #1
+  80 003e 1DD0     		beq	.L11
+  39:Src/mode.c    ****             Output_Buzzer(HZ_C_H);
+  40:Src/mode.c    ****             HAL_Delay(500);
+  41:Src/mode.c    ****             break;
+  42:Src/mode.c    ****         }
+  43:Src/mode.c    ****         LED_Control(mode);
+  81              		.loc 1 43 0
+  82 0040 E0B2     		uxtb	r0, r4
+  83 0042 FFF7FEFF 		bl	LED_Control
+  84              	.LVL8:
+  44:Src/mode.c    ****         printf("%d\r",mode);
+  85              		.loc 1 44 0
+  86 0046 2146     		mov	r1, r4
+  87 0048 1148     		ldr	r0, .L13
+  88 004a FFF7FEFF 		bl	printf
+  89              	.LVL9:
+  90              	.L7:
+  24:Src/mode.c    ****             if((int16_t)enc.distance_l > 30){
+  91              		.loc 1 24 0
+  92 004e 114B     		ldr	r3, .L13+4
+  93 0050 D3ED077A 		vldr.32	s15, [r3, #28]
+  94 0054 FDEEE77A 		vcvt.s32.f32	s15, s15
+  95 0058 17EE903A 		vmov	r3, s15	@ int
+  96 005c 1BB2     		sxth	r3, r3
+  97 005e 03F11E02 		add	r2, r3, #30
+  98 0062 92B2     		uxth	r2, r2
+  99 0064 3C2A     		cmp	r2, #60
+ 100 0066 E7D9     		bls	.L2
+  25:Src/mode.c    ****                 mode++;
+ 101              		.loc 1 25 0
+ 102 0068 1E2B     		cmp	r3, #30
+ 103 006a D0DD     		ble	.L3
+  26:Src/mode.c    ****             }else if((int16_t)enc.distance_l < -30){
+ 104              		.loc 1 26 0
+ 105 006c 0134     		adds	r4, r4, #1
+ 106              	.LVL10:
+ 107 006e 64B2     		sxtb	r4, r4
+ 108              	.LVL11:
+ 109              	.L4:
+  30:Src/mode.c    ****                 mode = 0;
+ 110              		.loc 1 30 0
+ 111 0070 072C     		cmp	r4, #7
+ 112 0072 D2DC     		bgt	.L8
+  32:Src/mode.c    ****                 mode = 7;
+ 113              		.loc 1 32 0
+ 114 0074 002C     		cmp	r4, #0
+ 115 0076 D1DA     		bge	.L5
+  33:Src/mode.c    ****             }
+ 116              		.loc 1 33 0
+ 117 0078 0724     		movs	r4, #7
+ 118              	.LVL12:
+ 119 007a CFE7     		b	.L5
+ 120              	.LVL13:
+ 121              	.L11:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 4
+
+
+  39:Src/mode.c    ****             HAL_Delay(500);
+ 122              		.loc 1 39 0
+ 123 007c 4C20     		movs	r0, #76
+ 124 007e FFF7FEFF 		bl	Output_Buzzer
+ 125              	.LVL14:
+  40:Src/mode.c    ****             break;
+ 126              		.loc 1 40 0
+ 127 0082 4FF4FA70 		mov	r0, #500
+ 128 0086 FFF7FEFF 		bl	HAL_Delay
+ 129              	.LVL15:
+  45:Src/mode.c    ****     }
+  46:Src/mode.c    ****     return mode;
+  47:Src/mode.c    **** }
+ 130              		.loc 1 47 0
+ 131 008a 2046     		mov	r0, r4
+ 132 008c 10BD     		pop	{r4, pc}
+ 133              	.LVL16:
+ 134              	.L14:
+ 135 008e 00BF     		.align	2
+ 136              	.L13:
+ 137 0090 00000000 		.word	.LC0
+ 138 0094 00000000 		.word	enc
+ 139              		.cfi_endproc
+ 140              	.LFE126:
+ 142              		.section	.text.Mode_mouse,"ax",%progbits
+ 143              		.align	1
+ 144              		.global	Mode_mouse
+ 145              		.syntax unified
+ 146              		.thumb
+ 147              		.thumb_func
+ 148              		.fpu fpv4-sp-d16
+ 150              	Mode_mouse:
+ 151              	.LFB127:
+  48:Src/mode.c    **** 
+  49:Src/mode.c    **** 
+  50:Src/mode.c    **** /****************************************************************************************
+  51:Src/mode.c    ****  * outline  : wright mode 
+  52:Src/mode.c    ****  * argument : mode nomber
+  53:Src/mode.c    ****  * return   : void
+  54:Src/mode.c    **** ********************************************************************************************/
+  55:Src/mode.c    **** void Mode_mouse(int8_t mode){
+ 152              		.loc 1 55 0
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 0
+ 155              		@ frame_needed = 0, uses_anonymous_args = 0
+ 156              	.LVL17:
+ 157 0000 08B5     		push	{r3, lr}
+ 158              	.LCFI1:
+ 159              		.cfi_def_cfa_offset 8
+ 160              		.cfi_offset 3, -8
+ 161              		.cfi_offset 14, -4
+  56:Src/mode.c    ****     switch(mode){
+ 162              		.loc 1 56 0
+ 163 0002 0728     		cmp	r0, #7
+ 164 0004 07D8     		bhi	.L16
+ 165 0006 DFE800F0 		tbb	[pc, r0]
+ 166              	.L18:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 5
+
+
+ 167 000a 04       		.byte	(.L17-.L18)/2
+ 168 000b 0B       		.byte	(.L19-.L18)/2
+ 169 000c 11       		.byte	(.L20-.L18)/2
+ 170 000d 1C       		.byte	(.L21-.L18)/2
+ 171 000e 27       		.byte	(.L22-.L18)/2
+ 172 000f 2E       		.byte	(.L23-.L18)/2
+ 173 0010 06       		.byte	(.L16-.L18)/2
+ 174 0011 3C       		.byte	(.L24-.L18)/2
+ 175              		.p2align 1
+ 176              	.L17:
+  57:Src/mode.c    ****         case 0:
+  58:Src/mode.c    ****         Sensor_Mode();
+ 177              		.loc 1 58 0
+ 178 0012 FFF7FEFF 		bl	Sensor_Mode
+ 179              	.LVL18:
+ 180              	.L16:
+  59:Src/mode.c    ****         
+  60:Src/mode.c    ****             //Mode_Adachi();
+  61:Src/mode.c    ****             /*
+  62:Src/mode.c    ****             PT_Switch();
+  63:Src/mode.c    ****             adcStart();
+  64:Src/mode.c    ****             flag.wall = true;
+  65:Src/mode.c    ****             while(1){
+  66:Src/mode.c    ****                 if(count_1m==1000){
+  67:Src/mode.c    ****                     Output_Buzzer(HZ_A);
+  68:Src/mode.c    ****                     flag.wall = false;
+  69:Src/mode.c    ****                     break;
+  70:Src/mode.c    ****                 }
+  71:Src/mode.c    ****             }
+  72:Src/mode.c    ****             */
+  73:Src/mode.c    ****             break;
+  74:Src/mode.c    ****         case 1:
+  75:Src/mode.c    ****             adcStart();
+  76:Src/mode.c    ****             flag.wall = ON;
+  77:Src/mode.c    ****             break;
+  78:Src/mode.c    ****         case 2:
+  79:Src/mode.c    ****             PT_Switch();
+  80:Src/mode.c    ****             gyro_offset_calc_reset();
+  81:Src/mode.c    ****             HAL_Delay(2000);
+  82:Src/mode.c    ****             Motion_Left();
+  83:Src/mode.c    ****             break;
+  84:Src/mode.c    ****         case 3:
+  85:Src/mode.c    ****             PT_Switch();
+  86:Src/mode.c    ****             gyro_offset_calc_reset();
+  87:Src/mode.c    ****             HAL_Delay(2000);
+  88:Src/mode.c    ****             Motion_Right();
+  89:Src/mode.c    ****             break;
+  90:Src/mode.c    ****         case 4:
+  91:Src/mode.c    ****             PT_Switch();
+  92:Src/mode.c    ****             gyro_offset_calc_reset();
+  93:Src/mode.c    ****             Motion_Uturn();
+  94:Src/mode.c    ****             break;
+  95:Src/mode.c    ****         case 5:
+  96:Src/mode.c    ****             PT_Switch();
+  97:Src/mode.c    ****             setIrledPwm(ON);
+  98:Src/mode.c    ****             gyro_offset_calc_reset();
+  99:Src/mode.c    ****             HAL_Delay(2000);
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 6
+
+
+ 100:Src/mode.c    ****             Motion_Straight_Check();
+ 101:Src/mode.c    ****             break;
+ 102:Src/mode.c    ****         case 6:
+ 103:Src/mode.c    ****             //Show_log();
+ 104:Src/mode.c    ****             
+ 105:Src/mode.c    ****             break;
+ 106:Src/mode.c    ****         case 7:
+ 107:Src/mode.c    ****             Show_log();
+ 108:Src/mode.c    ****             break;
+ 109:Src/mode.c    ****     }
+ 110:Src/mode.c    ****     HAL_Delay(1000);
+ 181              		.loc 1 110 0
+ 182 0016 4FF47A70 		mov	r0, #1000
+ 183 001a FFF7FEFF 		bl	HAL_Delay
+ 184              	.LVL19:
+ 111:Src/mode.c    **** }
+ 185              		.loc 1 111 0
+ 186 001e 08BD     		pop	{r3, pc}
+ 187              	.LVL20:
+ 188              	.L19:
+  75:Src/mode.c    ****             flag.wall = ON;
+ 189              		.loc 1 75 0
+ 190 0020 FFF7FEFF 		bl	adcStart
+ 191              	.LVL21:
+  76:Src/mode.c    ****             break;
+ 192              		.loc 1 76 0
+ 193 0024 184B     		ldr	r3, .L26
+ 194 0026 0122     		movs	r2, #1
+ 195 0028 5A72     		strb	r2, [r3, #9]
+  77:Src/mode.c    ****         case 2:
+ 196              		.loc 1 77 0
+ 197 002a F4E7     		b	.L16
+ 198              	.LVL22:
+ 199              	.L20:
+  79:Src/mode.c    ****             gyro_offset_calc_reset();
+ 200              		.loc 1 79 0
+ 201 002c FFF7FEFF 		bl	PT_Switch
+ 202              	.LVL23:
+  80:Src/mode.c    ****             HAL_Delay(2000);
+ 203              		.loc 1 80 0
+ 204 0030 FFF7FEFF 		bl	gyro_offset_calc_reset
+ 205              	.LVL24:
+  81:Src/mode.c    ****             Motion_Left();
+ 206              		.loc 1 81 0
+ 207 0034 4FF4FA60 		mov	r0, #2000
+ 208 0038 FFF7FEFF 		bl	HAL_Delay
+ 209              	.LVL25:
+  82:Src/mode.c    ****             break;
+ 210              		.loc 1 82 0
+ 211 003c FFF7FEFF 		bl	Motion_Left
+ 212              	.LVL26:
+  83:Src/mode.c    ****         case 3:
+ 213              		.loc 1 83 0
+ 214 0040 E9E7     		b	.L16
+ 215              	.LVL27:
+ 216              	.L21:
+  85:Src/mode.c    ****             gyro_offset_calc_reset();
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 7
+
+
+ 217              		.loc 1 85 0
+ 218 0042 FFF7FEFF 		bl	PT_Switch
+ 219              	.LVL28:
+  86:Src/mode.c    ****             HAL_Delay(2000);
+ 220              		.loc 1 86 0
+ 221 0046 FFF7FEFF 		bl	gyro_offset_calc_reset
+ 222              	.LVL29:
+  87:Src/mode.c    ****             Motion_Right();
+ 223              		.loc 1 87 0
+ 224 004a 4FF4FA60 		mov	r0, #2000
+ 225 004e FFF7FEFF 		bl	HAL_Delay
+ 226              	.LVL30:
+  88:Src/mode.c    ****             break;
+ 227              		.loc 1 88 0
+ 228 0052 FFF7FEFF 		bl	Motion_Right
+ 229              	.LVL31:
+  89:Src/mode.c    ****         case 4:
+ 230              		.loc 1 89 0
+ 231 0056 DEE7     		b	.L16
+ 232              	.LVL32:
+ 233              	.L22:
+  91:Src/mode.c    ****             gyro_offset_calc_reset();
+ 234              		.loc 1 91 0
+ 235 0058 FFF7FEFF 		bl	PT_Switch
+ 236              	.LVL33:
+  92:Src/mode.c    ****             Motion_Uturn();
+ 237              		.loc 1 92 0
+ 238 005c FFF7FEFF 		bl	gyro_offset_calc_reset
+ 239              	.LVL34:
+  93:Src/mode.c    ****             break;
+ 240              		.loc 1 93 0
+ 241 0060 FFF7FEFF 		bl	Motion_Uturn
+ 242              	.LVL35:
+  94:Src/mode.c    ****         case 5:
+ 243              		.loc 1 94 0
+ 244 0064 D7E7     		b	.L16
+ 245              	.LVL36:
+ 246              	.L23:
+  96:Src/mode.c    ****             setIrledPwm(ON);
+ 247              		.loc 1 96 0
+ 248 0066 FFF7FEFF 		bl	PT_Switch
+ 249              	.LVL37:
+  97:Src/mode.c    ****             gyro_offset_calc_reset();
+ 250              		.loc 1 97 0
+ 251 006a 0120     		movs	r0, #1
+ 252 006c FFF7FEFF 		bl	setIrledPwm
+ 253              	.LVL38:
+  98:Src/mode.c    ****             HAL_Delay(2000);
+ 254              		.loc 1 98 0
+ 255 0070 FFF7FEFF 		bl	gyro_offset_calc_reset
+ 256              	.LVL39:
+  99:Src/mode.c    ****             Motion_Straight_Check();
+ 257              		.loc 1 99 0
+ 258 0074 4FF4FA60 		mov	r0, #2000
+ 259 0078 FFF7FEFF 		bl	HAL_Delay
+ 260              	.LVL40:
+ 100:Src/mode.c    ****             break;
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 8
+
+
+ 261              		.loc 1 100 0
+ 262 007c FFF7FEFF 		bl	Motion_Straight_Check
+ 263              	.LVL41:
+ 101:Src/mode.c    ****         case 6:
+ 264              		.loc 1 101 0
+ 265 0080 C9E7     		b	.L16
+ 266              	.LVL42:
+ 267              	.L24:
+ 107:Src/mode.c    ****             break;
+ 268              		.loc 1 107 0
+ 269 0082 FFF7FEFF 		bl	Show_log
+ 270              	.LVL43:
+ 108:Src/mode.c    ****     }
+ 271              		.loc 1 108 0
+ 272 0086 C6E7     		b	.L16
+ 273              	.L27:
+ 274              		.align	2
+ 275              	.L26:
+ 276 0088 00000000 		.word	flag
+ 277              		.cfi_endproc
+ 278              	.LFE127:
+ 280              		.section	.text.Mode_Adachi,"ax",%progbits
+ 281              		.align	1
+ 282              		.global	Mode_Adachi
+ 283              		.syntax unified
+ 284              		.thumb
+ 285              		.thumb_func
+ 286              		.fpu fpv4-sp-d16
+ 288              	Mode_Adachi:
+ 289              	.LFB128:
+ 112:Src/mode.c    **** 
+ 113:Src/mode.c    **** 
+ 114:Src/mode.c    **** 
+ 115:Src/mode.c    **** void Mode_Adachi(void){
+ 290              		.loc 1 115 0
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 0
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294 0000 70B5     		push	{r4, r5, r6, lr}
+ 295              	.LCFI2:
+ 296              		.cfi_def_cfa_offset 16
+ 297              		.cfi_offset 4, -16
+ 298              		.cfi_offset 5, -12
+ 299              		.cfi_offset 6, -8
+ 300              		.cfi_offset 14, -4
+ 301              	.LVL44:
+ 116:Src/mode.c    ****     uint8_t flag_goal_is=false;
+ 117:Src/mode.c    ****     int8_t next_dir;
+ 118:Src/mode.c    **** 
+ 119:Src/mode.c    ****    
+ 120:Src/mode.c    ****     Init_maze();
+ 302              		.loc 1 120 0
+ 303 0002 FFF7FEFF 		bl	Init_maze
+ 304              	.LVL45:
+ 121:Src/mode.c    ****     PT_Switch();
+ 305              		.loc 1 121 0
+ 306 0006 FFF7FEFF 		bl	PT_Switch
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 9
+
+
+ 307              	.LVL46:
+ 122:Src/mode.c    ****     gyro_offset_calc_reset();
+ 308              		.loc 1 122 0
+ 309 000a FFF7FEFF 		bl	gyro_offset_calc_reset
+ 310              	.LVL47:
+ 123:Src/mode.c    ****     HAL_Delay(2000);
+ 311              		.loc 1 123 0
+ 312 000e 4FF4FA60 		mov	r0, #2000
+ 313 0012 FFF7FEFF 		bl	HAL_Delay
+ 314              	.LVL48:
+ 124:Src/mode.c    ****     setIrledPwm(ON);
+ 315              		.loc 1 124 0
+ 316 0016 0120     		movs	r0, #1
+ 317 0018 FFF7FEFF 		bl	setIrledPwm
+ 318              	.LVL49:
+ 125:Src/mode.c    ****     Motion_Start();
+ 319              		.loc 1 125 0
+ 320 001c FFF7FEFF 		bl	Motion_Start
+ 321              	.LVL50:
+ 126:Src/mode.c    ****     position.x=0;
+ 322              		.loc 1 126 0
+ 323 0020 214B     		ldr	r3, .L43
+ 324 0022 0026     		movs	r6, #0
+ 325 0024 1E70     		strb	r6, [r3]
+ 127:Src/mode.c    ****     position.y=1;
+ 326              		.loc 1 127 0
+ 327 0026 0122     		movs	r2, #1
+ 328 0028 5A70     		strb	r2, [r3, #1]
+ 128:Src/mode.c    ****     position.dir=NORTH;
+ 329              		.loc 1 128 0
+ 330 002a 9E70     		strb	r6, [r3, #2]
+ 129:Src/mode.c    ****     Maze_Set();
+ 331              		.loc 1 129 0
+ 332 002c FFF7FEFF 		bl	Maze_Set
+ 333              	.LVL51:
+ 130:Src/mode.c    **** 
+ 131:Src/mode.c    ****     adcStart();
+ 334              		.loc 1 131 0
+ 335 0030 FFF7FEFF 		bl	adcStart
+ 336              	.LVL52:
+ 337              	.L29:
+ 132:Src/mode.c    ****     
+ 133:Src/mode.c    ****     while(flag_goal_is==false){
+ 338              		.loc 1 133 0
+ 339 0034 002E     		cmp	r6, #0
+ 340 0036 33D1     		bne	.L41
+ 134:Src/mode.c    ****         Maze_Get_Wall(position.x,position.y);
+ 341              		.loc 1 134 0
+ 342 0038 1B4D     		ldr	r5, .L43
+ 343 003a 95F90110 		ldrsb	r1, [r5, #1]
+ 344 003e 95F90000 		ldrsb	r0, [r5]
+ 345 0042 FFF7FEFF 		bl	Maze_Get_Wall
+ 346              	.LVL53:
+ 135:Src/mode.c    ****         MAZE_Create_Step();
+ 347              		.loc 1 135 0
+ 348 0046 FFF7FEFF 		bl	MAZE_Create_Step
+ 349              	.LVL54:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 10
+
+
+ 136:Src/mode.c    ****         HAL_Delay(200);
+ 350              		.loc 1 136 0
+ 351 004a C820     		movs	r0, #200
+ 352 004c FFF7FEFF 		bl	HAL_Delay
+ 353              	.LVL55:
+ 137:Src/mode.c    ****         next_dir=Maze_Next_Motion();
+ 354              		.loc 1 137 0
+ 355 0050 FFF7FEFF 		bl	Maze_Next_Motion
+ 356              	.LVL56:
+ 357 0054 0446     		mov	r4, r0
+ 358              	.LVL57:
+ 138:Src/mode.c    ****         Update_Position(next_dir);
+ 359              		.loc 1 138 0
+ 360 0056 FFF7FEFF 		bl	Update_Position
+ 361              	.LVL58:
+ 139:Src/mode.c    ****         if(position.x==mazeDef.maze_goal_x && position.y==mazeDef.maze_goal_y){
+ 362              		.loc 1 139 0
+ 363 005a 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 364 005c 134B     		ldr	r3, .L43+4
+ 365 005e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 366 0060 9A42     		cmp	r2, r3
+ 367 0062 07D0     		beq	.L42
+ 368              	.LVL59:
+ 369              	.L30:
+ 140:Src/mode.c    ****             flag_goal_is=true;
+ 141:Src/mode.c    ****         }
+ 142:Src/mode.c    **** 
+ 143:Src/mode.c    ****         switch( next_dir ){
+ 370              		.loc 1 143 0
+ 371 0064 601C     		adds	r0, r4, #1
+ 372 0066 0428     		cmp	r0, #4
+ 373 0068 E4D8     		bhi	.L29
+ 374 006a DFE800F0 		tbb	[pc, r0]
+ 375              	.L33:
+ 376 006e 10       		.byte	(.L32-.L33)/2
+ 377 006f 0D       		.byte	(.L34-.L33)/2
+ 378 0070 0A       		.byte	(.L35-.L33)/2
+ 379 0071 13       		.byte	(.L36-.L33)/2
+ 380 0072 16       		.byte	(.L37-.L33)/2
+ 381 0073 00       		.p2align 1
+ 382              	.L42:
+ 139:Src/mode.c    ****         if(position.x==mazeDef.maze_goal_x && position.y==mazeDef.maze_goal_y){
+ 383              		.loc 1 139 0 discriminator 1
+ 384 0074 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 385 0076 0D4B     		ldr	r3, .L43+4
+ 386 0078 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 387 007a 9A42     		cmp	r2, r3
+ 388 007c F2D1     		bne	.L30
+ 140:Src/mode.c    ****             flag_goal_is=true;
+ 389              		.loc 1 140 0
+ 390 007e 0126     		movs	r6, #1
+ 391              	.LVL60:
+ 392 0080 F0E7     		b	.L30
+ 393              	.LVL61:
+ 394              	.L35:
+ 144:Src/mode.c    ****             case LEFT:
+ 145:Src/mode.c    ****                 Motion_Left();
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 11
+
+
+ 395              		.loc 1 145 0
+ 396 0082 FFF7FEFF 		bl	Motion_Left
+ 397              	.LVL62:
+ 146:Src/mode.c    ****                 break;
+ 398              		.loc 1 146 0
+ 399 0086 D5E7     		b	.L29
+ 400              	.L34:
+ 147:Src/mode.c    **** 
+ 148:Src/mode.c    ****             case STRAIGHT:
+ 149:Src/mode.c    ****                 Motion_Straight();
+ 401              		.loc 1 149 0
+ 402 0088 FFF7FEFF 		bl	Motion_Straight
+ 403              	.LVL63:
+ 150:Src/mode.c    ****                 break;
+ 404              		.loc 1 150 0
+ 405 008c D2E7     		b	.L29
+ 406              	.L32:
+ 151:Src/mode.c    ****             
+ 152:Src/mode.c    ****             case RIGHT:
+ 153:Src/mode.c    ****                 Motion_Right();
+ 407              		.loc 1 153 0
+ 408 008e FFF7FEFF 		bl	Motion_Right
+ 409              	.LVL64:
+ 154:Src/mode.c    ****                 break;
+ 410              		.loc 1 154 0
+ 411 0092 CFE7     		b	.L29
+ 412              	.L36:
+ 155:Src/mode.c    **** 
+ 156:Src/mode.c    ****             case UTURN:
+ 157:Src/mode.c    ****                 Motion_Uturn();
+ 413              		.loc 1 157 0
+ 414 0094 FFF7FEFF 		bl	Motion_Uturn
+ 415              	.LVL65:
+ 158:Src/mode.c    ****                 break;
+ 416              		.loc 1 158 0
+ 417 0098 CCE7     		b	.L29
+ 418              	.L37:
+ 159:Src/mode.c    ****             case KABEATE:
+ 160:Src/mode.c    ****                 Motion_Kabeate();
+ 419              		.loc 1 160 0
+ 420 009a FFF7FEFF 		bl	Motion_Kabeate
+ 421              	.LVL66:
+ 161:Src/mode.c    ****                 break;
+ 422              		.loc 1 161 0
+ 423 009e C9E7     		b	.L29
+ 424              	.LVL67:
+ 425              	.L41:
+ 162:Src/mode.c    ****         }
+ 163:Src/mode.c    ****     }
+ 164:Src/mode.c    ****     Motion_Goal();
+ 426              		.loc 1 164 0
+ 427 00a0 FFF7FEFF 		bl	Motion_Goal
+ 428              	.LVL68:
+ 165:Src/mode.c    **** }
+ 429              		.loc 1 165 0
+ 430 00a4 70BD     		pop	{r4, r5, r6, pc}
+ 431              	.LVL69:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 12
+
+
+ 432              	.L44:
+ 433 00a6 00BF     		.align	2
+ 434              	.L43:
+ 435 00a8 00000000 		.word	position
+ 436 00ac 00000000 		.word	mazeDef
+ 437              		.cfi_endproc
+ 438              	.LFE128:
+ 440              		.section	.text.Mode_Circuit,"ax",%progbits
+ 441              		.align	1
+ 442              		.global	Mode_Circuit
+ 443              		.syntax unified
+ 444              		.thumb
+ 445              		.thumb_func
+ 446              		.fpu fpv4-sp-d16
+ 448              	Mode_Circuit:
+ 449              	.LFB129:
+ 166:Src/mode.c    **** 
+ 167:Src/mode.c    **** void Mode_Circuit(void){
+ 450              		.loc 1 167 0
+ 451              		.cfi_startproc
+ 452              		@ args = 0, pretend = 0, frame = 0
+ 453              		@ frame_needed = 0, uses_anonymous_args = 0
+ 454 0000 08B5     		push	{r3, lr}
+ 455              	.LCFI3:
+ 456              		.cfi_def_cfa_offset 8
+ 457              		.cfi_offset 3, -8
+ 458              		.cfi_offset 14, -4
+ 168:Src/mode.c    ****     PT_Switch();
+ 459              		.loc 1 168 0
+ 460 0002 FFF7FEFF 		bl	PT_Switch
+ 461              	.LVL70:
+ 169:Src/mode.c    ****     gyro_offset_calc_reset();
+ 462              		.loc 1 169 0
+ 463 0006 FFF7FEFF 		bl	gyro_offset_calc_reset
+ 464              	.LVL71:
+ 170:Src/mode.c    ****     HAL_Delay(2000);
+ 465              		.loc 1 170 0
+ 466 000a 4FF4FA60 		mov	r0, #2000
+ 467 000e FFF7FEFF 		bl	HAL_Delay
+ 468              	.LVL72:
+ 171:Src/mode.c    ****     Motion_Straight_Check();
+ 469              		.loc 1 171 0
+ 470 0012 FFF7FEFF 		bl	Motion_Straight_Check
+ 471              	.LVL73:
+ 172:Src/mode.c    ****     //Motion_Start();    
+ 173:Src/mode.c    **** }...
+ 472              		.loc 1 173 0
+ 473 0016 08BD     		pop	{r3, pc}
+ 474              		.cfi_endproc
+ 475              	.LFE129:
+ 477              		.comm	maze,1793,4
+ 478              		.comm	straight_dir,1,1
+ 479              		.comm	wall_pid,2,2
+ 480              		.comm	yawrate_pid,2,2
+ 481              		.comm	straight_pid_r,2,2
+ 482              		.comm	straight_pid_l,2,2
+ 483              		.comm	w_befor,4,4
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 13
+
+
+ 484              		.comm	w_sum,4,4
+ 485              		.comm	y_sumsum,4,4
+ 486              		.comm	y_sum,4,4
+ 487              		.comm	s_sum_r,4,4
+ 488              		.comm	s_sum_l,4,4
+ 489              		.section	.rodata.Mode_select.str1.4,"aMS",%progbits,1
+ 490              		.align	2
+ 491              	.LC0:
+ 492 0000 25640D00 		.ascii	"%d\015\000"
+ 493              		.text
+ 494              	.Letext0:
+ 495              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 496              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 497              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 498              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 499              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi
+ 500              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 501              		.file 8 "Inc/global.h"
+ 502              		.file 9 "Drivers/CMSIS/Include/core_cm4.h"
+ 503              		.file 10 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 504              		.file 11 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 505              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 506              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 507              		.file 14 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h"
+ 508              		.file 15 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 509              		.file 16 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 510              		.file 17 "Inc/tim.h"
+ 511              		.file 18 "Inc/control.h"
+ 512              		.file 19 "Inc/spi.h"
+ 513              		.file 20 "Inc/adc.h"
+ 514              		.file 21 "Inc/maze.h"
+ 515              		.file 22 "Inc/motion.h"
+ 516              		.file 23 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 517              		.file 24 "Inc/function.h"
+ 518              		.file 25 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
+ 519              		.file 26 "Inc/gpio.h"
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mode.c
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:18     .text.Mode_select:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:25     .text.Mode_select:00000000 Mode_select
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:137    .text.Mode_select:00000090 $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:143    .text.Mode_mouse:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:150    .text.Mode_mouse:00000000 Mode_mouse
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:167    .text.Mode_mouse:0000000a $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:175    .text.Mode_mouse:00000012 $t
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:276    .text.Mode_mouse:00000088 $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:281    .text.Mode_Adachi:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:288    .text.Mode_Adachi:00000000 Mode_Adachi
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:376    .text.Mode_Adachi:0000006e $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:435    .text.Mode_Adachi:000000a8 $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:441    .text.Mode_Circuit:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:448    .text.Mode_Circuit:00000000 Mode_Circuit
+                            *COM*:00000701 maze
+                            *COM*:00000001 straight_dir
+                            *COM*:00000002 wall_pid
+                            *COM*:00000002 yawrate_pid
+                            *COM*:00000002 straight_pid_r
+                            *COM*:00000002 straight_pid_l
+                            *COM*:00000004 w_befor
+                            *COM*:00000004 w_sum
+                            *COM*:00000004 y_sumsum
+                            *COM*:00000004 y_sum
+                            *COM*:00000004 s_sum_r
+                            *COM*:00000004 s_sum_l
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:490    .rodata.Mode_select.str1.4:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:381    .text.Mode_Adachi:00000073 $d
+C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s:381    .text.Mode_Adachi:00000074 $t
+
+UNDEFINED SYMBOLS
+printf
+Output_Buzzer
+Push
+LED_Control
+HAL_Delay
+enc
+Sensor_Mode
+adcStart
+PT_Switch
+gyro_offset_calc_reset
+Motion_Left
+Motion_Right
+Motion_Uturn
+setIrledPwm
+Motion_Straight_Check
+Show_log
+flag
+Init_maze
+Motion_Start
+Maze_Set
+Maze_Get_Wall
+MAZE_Create_Step
+Maze_Next_Motion
+Update_Position
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccBRR8ik.s 			page 15
+
+
+Motion_Straight
+Motion_Kabeate
+Motion_Goal
+position
+mazeDef

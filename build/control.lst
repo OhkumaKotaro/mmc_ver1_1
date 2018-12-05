@@ -1,0 +1,1645 @@
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"control.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.PID_value,"ax",%progbits
+  18              		.align	1
+  19              		.global	PID_value
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	PID_value:
+  26              	.LFB159:
+  27              		.file 1 "Src/control.c"
+   1:Src/control.c **** #include "control.h"
+   2:Src/control.c **** #include <stdint.h>
+   3:Src/control.c **** #include "global.h"
+   4:Src/control.c **** #include "tim.h"
+   5:Src/control.c **** #include "arm_math.h"
+   6:Src/control.c **** #include "main.h"
+   7:Src/control.c **** #include "stm32f4xx_hal.h"
+   8:Src/control.c **** #include "function.h"
+   9:Src/control.c **** 
+  10:Src/control.c **** float encoder_Kp = 0;
+  11:Src/control.c **** float encoder_Ki = 0;
+  12:Src/control.c **** float encoder_Kd = 0;
+  13:Src/control.c **** 
+  14:Src/control.c **** /****************************************************************************************
+  15:Src/control.c ****  * outline  : PID control
+  16:Src/control.c ****  * argument : 
+  17:Src/control.c ****  * return   : control value
+  18:Src/control.c **** ********************************************************************************************/
+  19:Src/control.c **** float PID_value(float target,float measured,float *sum,float *old,float Kp,float Ki,float Kd){
+  28              		.loc 1 19 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  20:Src/control.c ****     float error;
+  21:Src/control.c ****     float p,i,d;
+  22:Src/control.c **** 
+  23:Src/control.c ****     error = target - measured;
+  34              		.loc 1 23 0
+  35 0000 70EE600A 		vsub.f32	s1, s0, s1
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 2
+
+
+  36              	.LVL1:
+  24:Src/control.c ****     p = Kp*error;
+  37              		.loc 1 24 0
+  38 0004 20EE811A 		vmul.f32	s2, s1, s2
+  39              	.LVL2:
+  25:Src/control.c **** 
+  26:Src/control.c ****     *sum += error * dt;
+  40              		.loc 1 26 0
+  41 0008 DFED0C7A 		vldr.32	s15, .L2
+  42 000c 60EEA77A 		vmul.f32	s15, s1, s15
+  43 0010 90ED000A 		vldr.32	s0, [r0]
+  44              	.LVL3:
+  45 0014 77EE807A 		vadd.f32	s15, s15, s0
+  46 0018 C0ED007A 		vstr.32	s15, [r0]
+  27:Src/control.c ****     i = *sum * Ki;
+  47              		.loc 1 27 0
+  48 001c 67EEA11A 		vmul.f32	s3, s15, s3
+  49              	.LVL4:
+  28:Src/control.c **** 
+  29:Src/control.c ****     d = Kd * (error - *old);
+  50              		.loc 1 29 0
+  51 0020 91ED007A 		vldr.32	s14, [r1]
+  52 0024 30EEC77A 		vsub.f32	s14, s1, s14
+  53 0028 27EE022A 		vmul.f32	s4, s14, s4
+  54              	.LVL5:
+  30:Src/control.c ****     *old = error;
+  55              		.loc 1 30 0
+  56 002c C1ED000A 		vstr.32	s1, [r1]
+  31:Src/control.c **** 
+  32:Src/control.c ****     return (p+i+d);
+  57              		.loc 1 32 0
+  58 0030 71EE211A 		vadd.f32	s3, s2, s3
+  59              	.LVL6:
+  33:Src/control.c **** }
+  60              		.loc 1 33 0
+  61 0034 31EE820A 		vadd.f32	s0, s3, s4
+  62 0038 7047     		bx	lr
+  63              	.L3:
+  64 003a 00BF     		.align	2
+  65              	.L2:
+  66 003c 6F12833A 		.word	981668463
+  67              		.cfi_endproc
+  68              	.LFE159:
+  70              		.section	.text.Integral_value,"ax",%progbits
+  71              		.align	1
+  72              		.global	Integral_value
+  73              		.syntax unified
+  74              		.thumb
+  75              		.thumb_func
+  76              		.fpu fpv4-sp-d16
+  78              	Integral_value:
+  79              	.LFB160:
+  34:Src/control.c **** 
+  35:Src/control.c **** float Integral_value(float error,float *sum,float Kii){
+  80              		.loc 1 35 0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 3
+
+
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              		@ link register save eliminated.
+  85              	.LVL7:
+  36:Src/control.c ****     float ii;
+  37:Src/control.c ****     *sum += error * dt;
+  86              		.loc 1 37 0
+  87 0000 DFED067A 		vldr.32	s15, .L5
+  88 0004 20EE270A 		vmul.f32	s0, s0, s15
+  89              	.LVL8:
+  90 0008 D0ED007A 		vldr.32	s15, [r0]
+  91 000c 30EE270A 		vadd.f32	s0, s0, s15
+  92 0010 80ED000A 		vstr.32	s0, [r0]
+  93              	.LVL9:
+  38:Src/control.c ****     ii = *sum * Kii;
+  39:Src/control.c ****     return ii;
+  40:Src/control.c **** }
+  94              		.loc 1 40 0
+  95 0014 20EE200A 		vmul.f32	s0, s0, s1
+  96              	.LVL10:
+  97 0018 7047     		bx	lr
+  98              	.L6:
+  99 001a 00BF     		.align	2
+ 100              	.L5:
+ 101 001c 6F12833A 		.word	981668463
+ 102              		.cfi_endproc
+ 103              	.LFE160:
+ 105              		.section	.text.Calc_Palam,"ax",%progbits
+ 106              		.align	1
+ 107              		.global	Calc_Palam
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 111              		.fpu fpv4-sp-d16
+ 113              	Calc_Palam:
+ 114              	.LFB161:
+  41:Src/control.c **** 
+  42:Src/control.c **** /****************************************************************************************
+  43:Src/control.c ****  * outline  : calculate parameter
+  44:Src/control.c ****  * argument : accel,*velocity,*distance
+  45:Src/control.c ****  * return   : void
+  46:Src/control.c **** ********************************************************************************************/
+  47:Src/control.c **** void Calc_Palam(int16_t accel,int16_t *velocity,uint16_t *calc_tim){
+ 115              		.loc 1 47 0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119              		@ link register save eliminated.
+ 120              	.LVL11:
+  48:Src/control.c ****     *calc_tim += 1;
+ 121              		.loc 1 48 0
+ 122 0000 1388     		ldrh	r3, [r2]
+ 123 0002 0133     		adds	r3, r3, #1
+ 124 0004 1380     		strh	r3, [r2]	@ movhi
+  49:Src/control.c ****     *velocity += accel * dt;
+ 125              		.loc 1 49 0
+ 126 0006 07EE900A 		vmov	s15, r0	@ int
+ 127 000a F8EEE77A 		vcvt.f32.s32	s15, s15
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 4
+
+
+ 128 000e 9FED097A 		vldr.32	s14, .L8
+ 129 0012 27EE877A 		vmul.f32	s14, s15, s14
+ 130 0016 B1F90030 		ldrsh	r3, [r1]
+ 131 001a 07EE903A 		vmov	s15, r3	@ int
+ 132 001e F8EEE77A 		vcvt.f32.s32	s15, s15
+ 133 0022 77EE877A 		vadd.f32	s15, s15, s14
+ 134 0026 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 135 002a 17EE903A 		vmov	r3, s15	@ int
+ 136 002e 0B80     		strh	r3, [r1]	@ movhi
+  50:Src/control.c **** }
+ 137              		.loc 1 50 0
+ 138 0030 7047     		bx	lr
+ 139              	.L9:
+ 140 0032 00BF     		.align	2
+ 141              	.L8:
+ 142 0034 6F12833A 		.word	981668463
+ 143              		.cfi_endproc
+ 144              	.LFE161:
+ 146              		.section	.text.Straight_Calc_fb,"ax",%progbits
+ 147              		.align	1
+ 148              		.global	Straight_Calc_fb
+ 149              		.syntax unified
+ 150              		.thumb
+ 151              		.thumb_func
+ 152              		.fpu fpv4-sp-d16
+ 154              	Straight_Calc_fb:
+ 155              	.LFB162:
+  51:Src/control.c **** 
+  52:Src/control.c **** 
+  53:Src/control.c **** /****************************************************************************************
+  54:Src/control.c ****  * outline  : calcurate accele distance
+  55:Src/control.c ****  * argument : distance[mm],v_start[mm/s],v_end[mm/s]
+  56:Src/control.c ****  * return   : void
+  57:Src/control.c **** ********************************************************************************************/
+  58:Src/control.c **** void Straight_Calc_fb(int16_t distant,int16_t v_start,int16_t v_end){
+ 156              		.loc 1 58 0
+ 157              		.cfi_startproc
+ 158              		@ args = 0, pretend = 0, frame = 0
+ 159              		@ frame_needed = 0, uses_anonymous_args = 0
+ 160              		@ link register save eliminated.
+ 161              	.LVL12:
+ 162 0000 10B4     		push	{r4}
+ 163              	.LCFI0:
+ 164              		.cfi_def_cfa_offset 4
+ 165              		.cfi_offset 4, -4
+  59:Src/control.c ****     float t1,t2,t3;
+  60:Src/control.c ****     float constant_L;
+  61:Src/control.c **** 
+  62:Src/control.c ****     calc.velocity = v_start;
+ 166              		.loc 1 62 0
+ 167 0002 354B     		ldr	r3, .L15
+ 168 0004 9980     		strh	r1, [r3, #4]	@ movhi
+  63:Src/control.c ****     enc.old_l = 0;
+ 169              		.loc 1 63 0
+ 170 0006 354C     		ldr	r4, .L15+4
+ 171 0008 0023     		movs	r3, #0
+ 172 000a 6362     		str	r3, [r4, #36]	@ float
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 5
+
+
+  64:Src/control.c ****     enc.old_r = 0;
+ 173              		.loc 1 64 0
+ 174 000c A362     		str	r3, [r4, #40]	@ float
+  65:Src/control.c ****     s_sum_l = 0;
+ 175              		.loc 1 65 0
+ 176 000e 344C     		ldr	r4, .L15+8
+ 177 0010 2360     		str	r3, [r4]	@ float
+  66:Src/control.c ****     s_sum_l = 0;
+  67:Src/control.c ****     flag.straight_zero = OFF;
+ 178              		.loc 1 67 0
+ 179 0012 344B     		ldr	r3, .L15+12
+ 180 0014 0024     		movs	r4, #0
+ 181 0016 DC70     		strb	r4, [r3, #3]
+  68:Src/control.c **** 
+  69:Src/control.c ****     if(distant<0){
+ 182              		.loc 1 69 0
+ 183 0018 0028     		cmp	r0, #0
+ 184              	.LVL13:
+ 185 001a 57DB     		blt	.L14
+  70:Src/control.c ****         distant = -1*distant;
+  71:Src/control.c ****         straight_dir=-1;
+  72:Src/control.c ****     }else{
+  73:Src/control.c ****         straight_dir=1;
+ 186              		.loc 1 73 0
+ 187 001c 324B     		ldr	r3, .L15+16
+ 188 001e 0124     		movs	r4, #1
+ 189 0020 1C70     		strb	r4, [r3]
+ 190              	.LVL14:
+ 191              	.L12:
+  74:Src/control.c ****     }
+  75:Src/control.c **** 
+  76:Src/control.c ****     t1 = (float)(MAX_VELOCITY - v_start) / ACCEL;
+ 192              		.loc 1 76 0
+ 193 0022 C1F59673 		rsb	r3, r1, #300
+ 194 0026 07EE903A 		vmov	s15, r3	@ int
+ 195 002a F8EEE77A 		vcvt.f32.s32	s15, s15
+ 196 002e 9FED2F7A 		vldr.32	s14, .L15+20
+ 197 0032 87EE876A 		vdiv.f32	s12, s15, s14
+ 198              	.LVL15:
+  77:Src/control.c ****     t3 = (float)(MAX_VELOCITY - v_end) / ACCEL;
+ 199              		.loc 1 77 0
+ 200 0036 C2F59672 		rsb	r2, r2, #300
+ 201              	.LVL16:
+ 202 003a 07EE902A 		vmov	s15, r2	@ int
+ 203 003e F8EEE77A 		vcvt.f32.s32	s15, s15
+ 204 0042 C7EE876A 		vdiv.f32	s13, s15, s14
+ 205              	.LVL17:
+  78:Src/control.c **** 
+  79:Src/control.c ****     constant_L = (float)distant - (MAX_VELOCITY + v_start) * t1 / 2 - (MAX_VELOCITY + v_start) * t3
+ 206              		.loc 1 79 0
+ 207 0046 07EE900A 		vmov	s15, r0	@ int
+ 208 004a B8EEE77A 		vcvt.f32.s32	s14, s15
+ 209 004e 01F59671 		add	r1, r1, #300
+ 210              	.LVL18:
+ 211 0052 07EE901A 		vmov	s15, r1	@ int
+ 212 0056 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 213 005a 67EE865A 		vmul.f32	s11, s15, s12
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 6
+
+
+ 214 005e B6EE005A 		vmov.f32	s10, #5.0e-1
+ 215 0062 65EE855A 		vmul.f32	s11, s11, s10
+ 216 0066 37EE657A 		vsub.f32	s14, s14, s11
+ 217 006a 67EEA67A 		vmul.f32	s15, s15, s13
+ 218 006e 67EE857A 		vmul.f32	s15, s15, s10
+ 219 0072 77EE677A 		vsub.f32	s15, s14, s15
+ 220              	.LVL19:
+  80:Src/control.c **** 
+  81:Src/control.c ****     t2 = constant_L / MAX_VELOCITY;
+ 221              		.loc 1 81 0
+ 222 0076 DFED1E5A 		vldr.32	s11, .L15+24
+ 223 007a 87EEA57A 		vdiv.f32	s14, s15, s11
+ 224              	.LVL20:
+  82:Src/control.c **** 
+  83:Src/control.c ****     t1 *= 1000;
+ 225              		.loc 1 83 0
+ 226 007e DFED1D5A 		vldr.32	s11, .L15+28
+ 227 0082 26EE256A 		vmul.f32	s12, s12, s11
+ 228              	.LVL21:
+  84:Src/control.c ****     t2 *= 1000;
+ 229              		.loc 1 84 0
+ 230 0086 67EE257A 		vmul.f32	s15, s14, s11
+ 231              	.LVL22:
+  85:Src/control.c ****     t3 *= 1000;
+ 232              		.loc 1 85 0
+ 233 008a 66EEA56A 		vmul.f32	s13, s13, s11
+ 234              	.LVL23:
+  86:Src/control.c **** 
+  87:Src/control.c ****     accel_T = t1;
+ 235              		.loc 1 87 0
+ 236 008e BCEEC66A 		vcvt.u32.f32	s12, s12
+ 237              	.LVL24:
+ 238 0092 194B     		ldr	r3, .L15+32
+ 239              	.LVL25:
+ 240 0094 16EE102A 		vmov	r2, s12	@ int
+ 241              	.LVL26:
+ 242 0098 1A80     		strh	r2, [r3]	@ movhi
+  88:Src/control.c ****     constant_T = t2;
+ 243              		.loc 1 88 0
+ 244 009a FCEEE77A 		vcvt.u32.f32	s15, s15
+ 245              	.LVL27:
+ 246 009e 174B     		ldr	r3, .L15+36
+ 247 00a0 17EE902A 		vmov	r2, s15	@ int
+ 248 00a4 1A80     		strh	r2, [r3]	@ movhi
+  89:Src/control.c ****     decrease_T = t3;
+ 249              		.loc 1 89 0
+ 250 00a6 FCEEE66A 		vcvt.u32.f32	s13, s13
+ 251              	.LVL28:
+ 252 00aa 154B     		ldr	r3, .L15+40
+ 253 00ac 16EE902A 		vmov	r2, s13	@ int
+ 254 00b0 1A80     		strh	r2, [r3]	@ movhi
+  90:Src/control.c **** 
+  91:Src/control.c ****     encoder_Kp = 4.0f;
+ 255              		.loc 1 91 0
+ 256 00b2 144B     		ldr	r3, .L15+44
+ 257 00b4 4FF08142 		mov	r2, #1082130432
+ 258 00b8 1A60     		str	r2, [r3]	@ float
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 7
+
+
+  92:Src/control.c ****     encoder_Ki = 10.0f;
+ 259              		.loc 1 92 0
+ 260 00ba 134B     		ldr	r3, .L15+48
+ 261 00bc 134A     		ldr	r2, .L15+52
+ 262 00be 1A60     		str	r2, [r3]	@ float
+  93:Src/control.c ****     encoder_Kd = 0;
+ 263              		.loc 1 93 0
+ 264 00c0 134B     		ldr	r3, .L15+56
+ 265 00c2 0022     		movs	r2, #0
+ 266 00c4 1A60     		str	r2, [r3]	@ float
+  94:Src/control.c **** }
+ 267              		.loc 1 94 0
+ 268 00c6 5DF8044B 		ldr	r4, [sp], #4
+ 269              	.LCFI1:
+ 270              		.cfi_remember_state
+ 271              		.cfi_restore 4
+ 272              		.cfi_def_cfa_offset 0
+ 273 00ca 7047     		bx	lr
+ 274              	.LVL29:
+ 275              	.L14:
+ 276              	.LCFI2:
+ 277              		.cfi_restore_state
+  70:Src/control.c ****         straight_dir=-1;
+ 278              		.loc 1 70 0
+ 279 00cc 4042     		negs	r0, r0
+ 280 00ce 00B2     		sxth	r0, r0
+ 281              	.LVL30:
+  71:Src/control.c ****     }else{
+ 282              		.loc 1 71 0
+ 283 00d0 054B     		ldr	r3, .L15+16
+ 284 00d2 FF24     		movs	r4, #255
+ 285 00d4 1C70     		strb	r4, [r3]
+ 286 00d6 A4E7     		b	.L12
+ 287              	.L16:
+ 288              		.align	2
+ 289              	.L15:
+ 290 00d8 00000000 		.word	calc
+ 291 00dc 00000000 		.word	enc
+ 292 00e0 00000000 		.word	s_sum_l
+ 293 00e4 00000000 		.word	flag
+ 294 00e8 00000000 		.word	straight_dir
+ 295 00ec 00007A45 		.word	1165623296
+ 296 00f0 00009643 		.word	1133903872
+ 297 00f4 00007A44 		.word	1148846080
+ 298 00f8 00000000 		.word	accel_T
+ 299 00fc 00000000 		.word	constant_T
+ 300 0100 00000000 		.word	decrease_T
+ 301 0104 00000000 		.word	.LANCHOR0
+ 302 0108 00000000 		.word	.LANCHOR1
+ 303 010c 00002041 		.word	1092616192
+ 304 0110 00000000 		.word	.LANCHOR2
+ 305              		.cfi_endproc
+ 306              	.LFE162:
+ 308              		.section	.text.Straight_Calc_Zero,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	Straight_Calc_Zero
+ 311              		.syntax unified
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 8
+
+
+ 312              		.thumb
+ 313              		.thumb_func
+ 314              		.fpu fpv4-sp-d16
+ 316              	Straight_Calc_Zero:
+ 317              	.LFB163:
+  95:Src/control.c **** 
+  96:Src/control.c **** void Straight_Calc_Zero(void){
+ 318              		.loc 1 96 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              		@ link register save eliminated.
+  97:Src/control.c ****     flag.straight_zero=ON;
+ 323              		.loc 1 97 0
+ 324 0000 064B     		ldr	r3, .L18
+ 325 0002 0122     		movs	r2, #1
+ 326 0004 DA70     		strb	r2, [r3, #3]
+  98:Src/control.c ****     encoder_Kp = 4.0;  //4.0
+ 327              		.loc 1 98 0
+ 328 0006 064B     		ldr	r3, .L18+4
+ 329 0008 4FF08142 		mov	r2, #1082130432
+ 330 000c 1A60     		str	r2, [r3]	@ float
+  99:Src/control.c ****     encoder_Ki = 10.0;
+ 331              		.loc 1 99 0
+ 332 000e 054B     		ldr	r3, .L18+8
+ 333 0010 054A     		ldr	r2, .L18+12
+ 334 0012 1A60     		str	r2, [r3]	@ float
+ 100:Src/control.c ****     encoder_Kd = 0;
+ 335              		.loc 1 100 0
+ 336 0014 054B     		ldr	r3, .L18+16
+ 337 0016 0022     		movs	r2, #0
+ 338 0018 1A60     		str	r2, [r3]	@ float
+ 101:Src/control.c **** }
+ 339              		.loc 1 101 0
+ 340 001a 7047     		bx	lr
+ 341              	.L19:
+ 342              		.align	2
+ 343              	.L18:
+ 344 001c 00000000 		.word	flag
+ 345 0020 00000000 		.word	.LANCHOR0
+ 346 0024 00000000 		.word	.LANCHOR1
+ 347 0028 00002041 		.word	1092616192
+ 348 002c 00000000 		.word	.LANCHOR2
+ 349              		.cfi_endproc
+ 350              	.LFE163:
+ 352              		.section	.text.Straight_SysTic_fb,"ax",%progbits
+ 353              		.align	1
+ 354              		.global	Straight_SysTic_fb
+ 355              		.syntax unified
+ 356              		.thumb
+ 357              		.thumb_func
+ 358              		.fpu fpv4-sp-d16
+ 360              	Straight_SysTic_fb:
+ 361              	.LFB164:
+ 102:Src/control.c **** 
+ 103:Src/control.c **** /****************************************************************************************
+ 104:Src/control.c ****  * outline  : output pwm for trapezoid accele straight by feadbuck control
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 9
+
+
+ 105:Src/control.c ****  * argument : void
+ 106:Src/control.c ****  * return   : void
+ 107:Src/control.c **** ********************************************************************************************/
+ 108:Src/control.c **** void Straight_SysTic_fb(void){
+ 362              		.loc 1 108 0
+ 363              		.cfi_startproc
+ 364              		@ args = 0, pretend = 0, frame = 0
+ 365              		@ frame_needed = 0, uses_anonymous_args = 0
+ 366 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 367              	.LCFI3:
+ 368              		.cfi_def_cfa_offset 24
+ 369              		.cfi_offset 3, -24
+ 370              		.cfi_offset 4, -20
+ 371              		.cfi_offset 5, -16
+ 372              		.cfi_offset 6, -12
+ 373              		.cfi_offset 7, -8
+ 374              		.cfi_offset 14, -4
+ 375 0002 2DED048B 		vpush.64	{d8, d9}
+ 376              	.LCFI4:
+ 377              		.cfi_def_cfa_offset 40
+ 378              		.cfi_offset 80, -40
+ 379              		.cfi_offset 81, -36
+ 380              		.cfi_offset 82, -32
+ 381              		.cfi_offset 83, -28
+ 382              	.LVL31:
+ 109:Src/control.c ****     float encoder_l,encoder_r;
+ 110:Src/control.c ****     float target = 1;
+ 111:Src/control.c ****     if(flag.straight_zero == ON){
+ 383              		.loc 1 111 0
+ 384 0006 474B     		ldr	r3, .L31
+ 385 0008 DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 386 000a DBB2     		uxtb	r3, r3
+ 387 000c 012B     		cmp	r3, #1
+ 388 000e 23D0     		beq	.L27
+ 112:Src/control.c ****         encoder_l = enc.velocity_c;
+ 113:Src/control.c ****         encoder_r = enc.velocity_c;
+ 114:Src/control.c ****         calc.velocity = 0;
+ 115:Src/control.c ****     }
+ 116:Src/control.c ****     else if(straight_cnt < accel_T){
+ 389              		.loc 1 116 0
+ 390 0010 454B     		ldr	r3, .L31+4
+ 391 0012 1A88     		ldrh	r2, [r3]
+ 392 0014 454B     		ldr	r3, .L31+8
+ 393 0016 1B88     		ldrh	r3, [r3]
+ 394 0018 9A42     		cmp	r2, r3
+ 395 001a 60D3     		bcc	.L28
+ 117:Src/control.c ****         encoder_l = enc.velocity_l;
+ 118:Src/control.c ****         encoder_r = enc.velocity_r;
+ 119:Src/control.c ****         Calc_Palam(ACCEL,&calc.velocity,&straight_cnt);
+ 120:Src/control.c ****     }
+ 121:Src/control.c ****     else if(straight_cnt < constant_T + accel_T){
+ 396              		.loc 1 121 0
+ 397 001c 4449     		ldr	r1, .L31+12
+ 398 001e 0888     		ldrh	r0, [r1]
+ 399 0020 C118     		adds	r1, r0, r3
+ 400 0022 8A42     		cmp	r2, r1
+ 401 0024 67DB     		blt	.L29
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 10
+
+
+ 122:Src/control.c ****         encoder_l = enc.velocity_l;
+ 123:Src/control.c ****         encoder_r = enc.velocity_r;
+ 124:Src/control.c ****         Calc_Palam(0,&calc.velocity,&straight_cnt);
+ 125:Src/control.c ****     }
+ 126:Src/control.c ****     else if(straight_cnt < decrease_T + constant_T + accel_T){
+ 402              		.loc 1 126 0
+ 403 0026 4349     		ldr	r1, .L31+16
+ 404 0028 0988     		ldrh	r1, [r1]
+ 405 002a 0144     		add	r1, r1, r0
+ 406 002c 0B44     		add	r3, r3, r1
+ 407 002e 9A42     		cmp	r2, r3
+ 408 0030 6CDB     		blt	.L30
+ 127:Src/control.c ****         encoder_l = enc.velocity_l;
+ 128:Src/control.c ****         encoder_r = enc.velocity_r;
+ 129:Src/control.c ****         Calc_Palam(-ACCEL,&calc.velocity,&straight_cnt);
+ 130:Src/control.c ****     }else{
+ 131:Src/control.c ****         encoder_l = enc.velocity_l;
+ 409              		.loc 1 131 0
+ 410 0032 414B     		ldr	r3, .L31+20
+ 411 0034 D3ED048A 		vldr.32	s17, [r3, #16]
+ 412              	.LVL32:
+ 132:Src/control.c ****         encoder_r = enc.velocity_r;
+ 413              		.loc 1 132 0
+ 414 0038 93ED059A 		vldr.32	s18, [r3, #20]
+ 415              	.LVL33:
+ 133:Src/control.c ****         calc.velocity = 0;
+ 416              		.loc 1 133 0
+ 417 003c 3F4A     		ldr	r2, .L31+24
+ 418 003e 0021     		movs	r1, #0
+ 419 0040 9180     		strh	r1, [r2, #4]	@ movhi
+ 134:Src/control.c ****         if(enc.velocity_c==0){
+ 420              		.loc 1 134 0
+ 421 0042 D3ED067A 		vldr.32	s15, [r3, #24]
+ 422 0046 F5EE407A 		vcmp.f32	s15, #0
+ 423 004a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 424 004e 0BD1     		bne	.L22
+ 135:Src/control.c ****             flag.straight = OFF;
+ 425              		.loc 1 135 0
+ 426 0050 344B     		ldr	r3, .L31
+ 427 0052 5970     		strb	r1, [r3, #1]
+ 136:Src/control.c ****             flag.yawrate = OFF;
+ 428              		.loc 1 136 0
+ 429 0054 9970     		strb	r1, [r3, #2]
+ 430 0056 07E0     		b	.L22
+ 431              	.LVL34:
+ 432              	.L27:
+ 112:Src/control.c ****         encoder_r = enc.velocity_c;
+ 433              		.loc 1 112 0
+ 434 0058 374B     		ldr	r3, .L31+20
+ 435 005a D3ED068A 		vldr.32	s17, [r3, #24]
+ 436              	.LVL35:
+ 114:Src/control.c ****     }
+ 437              		.loc 1 114 0
+ 438 005e 374B     		ldr	r3, .L31+24
+ 439 0060 0022     		movs	r2, #0
+ 440 0062 9A80     		strh	r2, [r3, #4]	@ movhi
+ 113:Src/control.c ****         calc.velocity = 0;
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 11
+
+
+ 441              		.loc 1 113 0
+ 442 0064 B0EE689A 		vmov.f32	s18, s17
+ 443              	.LVL36:
+ 444              	.L22:
+ 137:Src/control.c ****         }
+ 138:Src/control.c ****         //flag.wall = OFF;
+ 139:Src/control.c ****     }
+ 140:Src/control.c **** 
+ 141:Src/control.c ****     target = straight_dir * calc.velocity;
+ 445              		.loc 1 141 0
+ 446 0068 344B     		ldr	r3, .L31+24
+ 447 006a B3F90430 		ldrsh	r3, [r3, #4]
+ 448 006e 344A     		ldr	r2, .L31+28
+ 449 0070 92F90020 		ldrsb	r2, [r2]
+ 450 0074 03FB02F3 		mul	r3, r3, r2
+ 451 0078 07EE903A 		vmov	s15, r3	@ int
+ 452 007c B8EEE78A 		vcvt.f32.s32	s16, s15
+ 453              	.LVL37:
+ 142:Src/control.c ****     
+ 143:Src/control.c ****     straight_pid_l = (int16_t)PID_value(target,encoder_l,&s_sum_l,&enc.old_l,encoder_Kp,encoder_Ki,
+ 454              		.loc 1 143 0
+ 455 0080 304F     		ldr	r7, .L31+32
+ 456 0082 314E     		ldr	r6, .L31+36
+ 457 0084 314D     		ldr	r5, .L31+40
+ 458 0086 324C     		ldr	r4, .L31+44
+ 459 0088 97ED002A 		vldr.32	s4, [r7]
+ 460 008c D6ED001A 		vldr.32	s3, [r6]
+ 461 0090 95ED001A 		vldr.32	s2, [r5]
+ 462 0094 2146     		mov	r1, r4
+ 463 0096 2F48     		ldr	r0, .L31+48
+ 464 0098 F0EE680A 		vmov.f32	s1, s17
+ 465 009c B0EE480A 		vmov.f32	s0, s16
+ 466 00a0 FFF7FEFF 		bl	PID_value
+ 467              	.LVL38:
+ 468 00a4 BDEEC00A 		vcvt.s32.f32	s0, s0
+ 469 00a8 2B4B     		ldr	r3, .L31+52
+ 470 00aa 10EE102A 		vmov	r2, s0	@ int
+ 471 00ae 1A80     		strh	r2, [r3]	@ movhi
+ 144:Src/control.c ****     straight_pid_r = (int16_t)PID_value(target,encoder_r,&s_sum_r,&enc.old_r,encoder_Kp,encoder_Ki,
+ 472              		.loc 1 144 0
+ 473 00b0 97ED002A 		vldr.32	s4, [r7]
+ 474 00b4 D6ED001A 		vldr.32	s3, [r6]
+ 475 00b8 95ED001A 		vldr.32	s2, [r5]
+ 476 00bc 211D     		adds	r1, r4, #4
+ 477 00be 2748     		ldr	r0, .L31+56
+ 478 00c0 F0EE490A 		vmov.f32	s1, s18
+ 479 00c4 B0EE480A 		vmov.f32	s0, s16
+ 480 00c8 FFF7FEFF 		bl	PID_value
+ 481              	.LVL39:
+ 482 00cc BDEEC00A 		vcvt.s32.f32	s0, s0
+ 483 00d0 234B     		ldr	r3, .L31+60
+ 484 00d2 10EE102A 		vmov	r2, s0	@ int
+ 485 00d6 1A80     		strh	r2, [r3]	@ movhi
+ 145:Src/control.c **** }
+ 486              		.loc 1 145 0
+ 487 00d8 BDEC048B 		vldm	sp!, {d8-d9}
+ 488              	.LCFI5:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 12
+
+
+ 489              		.cfi_remember_state
+ 490              		.cfi_restore 82
+ 491              		.cfi_restore 83
+ 492              		.cfi_restore 80
+ 493              		.cfi_restore 81
+ 494              		.cfi_def_cfa_offset 24
+ 495              	.LVL40:
+ 496 00dc F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 497              	.LVL41:
+ 498              	.L28:
+ 499              	.LCFI6:
+ 500              		.cfi_restore_state
+ 117:Src/control.c ****         encoder_r = enc.velocity_r;
+ 501              		.loc 1 117 0
+ 502 00de 164B     		ldr	r3, .L31+20
+ 503 00e0 D3ED048A 		vldr.32	s17, [r3, #16]
+ 504              	.LVL42:
+ 118:Src/control.c ****         Calc_Palam(ACCEL,&calc.velocity,&straight_cnt);
+ 505              		.loc 1 118 0
+ 506 00e4 93ED059A 		vldr.32	s18, [r3, #20]
+ 507              	.LVL43:
+ 119:Src/control.c ****     }
+ 508              		.loc 1 119 0
+ 509 00e8 0F4A     		ldr	r2, .L31+4
+ 510 00ea 1E49     		ldr	r1, .L31+64
+ 511 00ec 4FF47A60 		mov	r0, #4000
+ 512 00f0 FFF7FEFF 		bl	Calc_Palam
+ 513              	.LVL44:
+ 514 00f4 B8E7     		b	.L22
+ 515              	.LVL45:
+ 516              	.L29:
+ 122:Src/control.c ****         encoder_r = enc.velocity_r;
+ 517              		.loc 1 122 0
+ 518 00f6 104B     		ldr	r3, .L31+20
+ 519 00f8 D3ED048A 		vldr.32	s17, [r3, #16]
+ 520              	.LVL46:
+ 123:Src/control.c ****         Calc_Palam(0,&calc.velocity,&straight_cnt);
+ 521              		.loc 1 123 0
+ 522 00fc 93ED059A 		vldr.32	s18, [r3, #20]
+ 523              	.LVL47:
+ 124:Src/control.c ****     }
+ 524              		.loc 1 124 0
+ 525 0100 094A     		ldr	r2, .L31+4
+ 526 0102 1849     		ldr	r1, .L31+64
+ 527 0104 0020     		movs	r0, #0
+ 528 0106 FFF7FEFF 		bl	Calc_Palam
+ 529              	.LVL48:
+ 530 010a ADE7     		b	.L22
+ 531              	.LVL49:
+ 532              	.L30:
+ 127:Src/control.c ****         encoder_r = enc.velocity_r;
+ 533              		.loc 1 127 0
+ 534 010c 0A4B     		ldr	r3, .L31+20
+ 535 010e D3ED048A 		vldr.32	s17, [r3, #16]
+ 536              	.LVL50:
+ 128:Src/control.c ****         Calc_Palam(-ACCEL,&calc.velocity,&straight_cnt);
+ 537              		.loc 1 128 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 13
+
+
+ 538 0112 93ED059A 		vldr.32	s18, [r3, #20]
+ 539              	.LVL51:
+ 129:Src/control.c ****     }else{
+ 540              		.loc 1 129 0
+ 541 0116 044A     		ldr	r2, .L31+4
+ 542 0118 1249     		ldr	r1, .L31+64
+ 543 011a 1348     		ldr	r0, .L31+68
+ 544 011c FFF7FEFF 		bl	Calc_Palam
+ 545              	.LVL52:
+ 546 0120 A2E7     		b	.L22
+ 547              	.L32:
+ 548 0122 00BF     		.align	2
+ 549              	.L31:
+ 550 0124 00000000 		.word	flag
+ 551 0128 00000000 		.word	straight_cnt
+ 552 012c 00000000 		.word	accel_T
+ 553 0130 00000000 		.word	constant_T
+ 554 0134 00000000 		.word	decrease_T
+ 555 0138 00000000 		.word	enc
+ 556 013c 00000000 		.word	calc
+ 557 0140 00000000 		.word	straight_dir
+ 558 0144 00000000 		.word	.LANCHOR2
+ 559 0148 00000000 		.word	.LANCHOR1
+ 560 014c 00000000 		.word	.LANCHOR0
+ 561 0150 24000000 		.word	enc+36
+ 562 0154 00000000 		.word	s_sum_l
+ 563 0158 00000000 		.word	straight_pid_l
+ 564 015c 00000000 		.word	s_sum_r
+ 565 0160 00000000 		.word	straight_pid_r
+ 566 0164 04000000 		.word	calc+4
+ 567 0168 60F0FFFF 		.word	-4000
+ 568              		.cfi_endproc
+ 569              	.LFE164:
+ 571              		.section	.text.Yawrate_Calc_fb,"ax",%progbits
+ 572              		.align	1
+ 573              		.global	Yawrate_Calc_fb
+ 574              		.syntax unified
+ 575              		.thumb
+ 576              		.thumb_func
+ 577              		.fpu fpv4-sp-d16
+ 579              	Yawrate_Calc_fb:
+ 580              	.LFB165:
+ 146:Src/control.c **** 
+ 147:Src/control.c **** 
+ 148:Src/control.c **** /****************************************************************************************
+ 149:Src/control.c ****  * outline  : calcurate trapezoid accel
+ 150:Src/control.c ****  * argument : degree[degree],v_start[degree/s],v_end[degree/s]
+ 151:Src/control.c ****  * return   : void
+ 152:Src/control.c **** ********************************************************************************************/
+ 153:Src/control.c **** void Yawrate_Calc_fb(int16_t degree,int16_t v_start,int16_t v_end){
+ 581              		.loc 1 153 0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585              		@ link register save eliminated.
+ 586              	.LVL53:
+ 587 0000 10B4     		push	{r4}
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 14
+
+
+ 588              	.LCFI7:
+ 589              		.cfi_def_cfa_offset 4
+ 590              		.cfi_offset 4, -4
+ 154:Src/control.c ****     calc.yawrate_velocity = v_start;
+ 591              		.loc 1 154 0
+ 592 0002 2D4B     		ldr	r3, .L35
+ 593 0004 9981     		strh	r1, [r3, #12]	@ movhi
+ 155:Src/control.c ****     y_sum = 0;
+ 594              		.loc 1 155 0
+ 595 0006 0023     		movs	r3, #0
+ 596 0008 2C4C     		ldr	r4, .L35+4
+ 597 000a 2360     		str	r3, [r4]	@ float
+ 156:Src/control.c ****     gyro.befor = 0;
+ 598              		.loc 1 156 0
+ 599 000c 2C4C     		ldr	r4, .L35+8
+ 600 000e A360     		str	r3, [r4, #8]	@ float
+ 157:Src/control.c ****     flag.yawrate_zero = OFF;
+ 601              		.loc 1 157 0
+ 602 0010 2C4B     		ldr	r3, .L35+12
+ 603 0012 0024     		movs	r4, #0
+ 604 0014 1C71     		strb	r4, [r3, #4]
+ 605              	.LVL54:
+ 158:Src/control.c **** 
+ 159:Src/control.c ****     float t1=0,t2=0,t3=0;
+ 160:Src/control.c ****     float constant_L;
+ 161:Src/control.c **** 
+ 162:Src/control.c ****     t1 = (float)(Y_MAX_VELOCITY - v_start) / Y_ACCEL;
+ 606              		.loc 1 162 0
+ 607 0016 C1F5BE73 		rsb	r3, r1, #380
+ 608 001a 07EE903A 		vmov	s15, r3	@ int
+ 609 001e F8EEE77A 		vcvt.f32.s32	s15, s15
+ 610 0022 9FED297A 		vldr.32	s14, .L35+16
+ 611 0026 87EE876A 		vdiv.f32	s12, s15, s14
+ 612              	.LVL55:
+ 163:Src/control.c ****     t3 = (float)(Y_MAX_VELOCITY - v_end) / Y_ACCEL;
+ 613              		.loc 1 163 0
+ 614 002a C2F5BE73 		rsb	r3, r2, #380
+ 615 002e 07EE903A 		vmov	s15, r3	@ int
+ 616 0032 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 617 0036 C7EE876A 		vdiv.f32	s13, s15, s14
+ 618              	.LVL56:
+ 164:Src/control.c **** 
+ 165:Src/control.c ****     constant_L = (float)degree - (Y_MAX_VELOCITY + v_start) * t1 / 2 - (Y_MAX_VELOCITY + v_end) * t
+ 619              		.loc 1 165 0
+ 620 003a 07EE900A 		vmov	s15, r0	@ int
+ 621 003e B8EEE77A 		vcvt.f32.s32	s14, s15
+ 622 0042 01F5BE73 		add	r3, r1, #380
+ 623 0046 07EE903A 		vmov	s15, r3	@ int
+ 624 004a F8EEE77A 		vcvt.f32.s32	s15, s15
+ 625 004e 67EE867A 		vmul.f32	s15, s15, s12
+ 626 0052 F6EE005A 		vmov.f32	s11, #5.0e-1
+ 627 0056 67EEA57A 		vmul.f32	s15, s15, s11
+ 628 005a 77EE677A 		vsub.f32	s15, s14, s15
+ 629 005e 02F5BE73 		add	r3, r2, #380
+ 630 0062 07EE103A 		vmov	s14, r3	@ int
+ 631 0066 B8EEC77A 		vcvt.f32.s32	s14, s14
+ 632 006a 27EE267A 		vmul.f32	s14, s14, s13
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 15
+
+
+ 633 006e 27EE257A 		vmul.f32	s14, s14, s11
+ 634 0072 37EEC77A 		vsub.f32	s14, s15, s14
+ 635              	.LVL57:
+ 166:Src/control.c ****     
+ 167:Src/control.c ****     t2 = constant_L / Y_MAX_VELOCITY;
+ 636              		.loc 1 167 0
+ 637 0076 DFED155A 		vldr.32	s11, .L35+20
+ 638 007a C7EE257A 		vdiv.f32	s15, s14, s11
+ 639              	.LVL58:
+ 168:Src/control.c **** 
+ 169:Src/control.c ****     t1 *= 1000;
+ 640              		.loc 1 169 0
+ 641 007e 9FED147A 		vldr.32	s14, .L35+24
+ 642              	.LVL59:
+ 643 0082 26EE076A 		vmul.f32	s12, s12, s14
+ 644              	.LVL60:
+ 170:Src/control.c ****     t2 *= 1000;
+ 645              		.loc 1 170 0
+ 646 0086 67EE877A 		vmul.f32	s15, s15, s14
+ 647              	.LVL61:
+ 171:Src/control.c ****     t3 *= 1000;
+ 648              		.loc 1 171 0
+ 649 008a 66EE876A 		vmul.f32	s13, s13, s14
+ 650              	.LVL62:
+ 172:Src/control.c **** 
+ 173:Src/control.c ****     y_accel_T = t1;
+ 651              		.loc 1 173 0
+ 652 008e BCEEC66A 		vcvt.u32.f32	s12, s12
+ 653              	.LVL63:
+ 654 0092 104B     		ldr	r3, .L35+28
+ 655              	.LVL64:
+ 656 0094 16EE102A 		vmov	r2, s12	@ int
+ 657              	.LVL65:
+ 658 0098 1A80     		strh	r2, [r3]	@ movhi
+ 174:Src/control.c ****     y_constant_T = t2;
+ 659              		.loc 1 174 0
+ 660 009a FCEEE77A 		vcvt.u32.f32	s15, s15
+ 661              	.LVL66:
+ 662 009e 0E4B     		ldr	r3, .L35+32
+ 663 00a0 17EE902A 		vmov	r2, s15	@ int
+ 664 00a4 1A80     		strh	r2, [r3]	@ movhi
+ 175:Src/control.c ****     y_decrease_T = t3;
+ 665              		.loc 1 175 0
+ 666 00a6 FCEEE66A 		vcvt.u32.f32	s13, s13
+ 667              	.LVL67:
+ 668 00aa 0C4B     		ldr	r3, .L35+36
+ 669 00ac 16EE902A 		vmov	r2, s13	@ int
+ 670 00b0 1A80     		strh	r2, [r3]	@ movhi
+ 176:Src/control.c **** }
+ 671              		.loc 1 176 0
+ 672 00b2 5DF8044B 		ldr	r4, [sp], #4
+ 673              	.LCFI8:
+ 674              		.cfi_restore 4
+ 675              		.cfi_def_cfa_offset 0
+ 676 00b6 7047     		bx	lr
+ 677              	.L36:
+ 678              		.align	2
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 16
+
+
+ 679              	.L35:
+ 680 00b8 00000000 		.word	calc
+ 681 00bc 00000000 		.word	y_sum
+ 682 00c0 00000000 		.word	gyro
+ 683 00c4 00000000 		.word	flag
+ 684 00c8 0000FA44 		.word	1157234688
+ 685 00cc 0000BE43 		.word	1136525312
+ 686 00d0 00007A44 		.word	1148846080
+ 687 00d4 00000000 		.word	y_accel_T
+ 688 00d8 00000000 		.word	y_constant_T
+ 689 00dc 00000000 		.word	y_decrease_T
+ 690              		.cfi_endproc
+ 691              	.LFE165:
+ 693              		.section	.text.Yawrate_Calc_Zero,"ax",%progbits
+ 694              		.align	1
+ 695              		.global	Yawrate_Calc_Zero
+ 696              		.syntax unified
+ 697              		.thumb
+ 698              		.thumb_func
+ 699              		.fpu fpv4-sp-d16
+ 701              	Yawrate_Calc_Zero:
+ 702              	.LFB166:
+ 177:Src/control.c **** 
+ 178:Src/control.c **** void Yawrate_Calc_Zero(void){
+ 703              		.loc 1 178 0
+ 704              		.cfi_startproc
+ 705              		@ args = 0, pretend = 0, frame = 0
+ 706              		@ frame_needed = 0, uses_anonymous_args = 0
+ 707              		@ link register save eliminated.
+ 179:Src/control.c ****     flag.yawrate_zero=ON;
+ 708              		.loc 1 179 0
+ 709 0000 014B     		ldr	r3, .L38
+ 710 0002 0122     		movs	r2, #1
+ 711 0004 1A71     		strb	r2, [r3, #4]
+ 180:Src/control.c **** }
+ 712              		.loc 1 180 0
+ 713 0006 7047     		bx	lr
+ 714              	.L39:
+ 715              		.align	2
+ 716              	.L38:
+ 717 0008 00000000 		.word	flag
+ 718              		.cfi_endproc
+ 719              	.LFE166:
+ 721              		.section	.text.Yawrate_SysTic_fb,"ax",%progbits
+ 722              		.align	1
+ 723              		.global	Yawrate_SysTic_fb
+ 724              		.syntax unified
+ 725              		.thumb
+ 726              		.thumb_func
+ 727              		.fpu fpv4-sp-d16
+ 729              	Yawrate_SysTic_fb:
+ 730              	.LFB167:
+ 181:Src/control.c **** 
+ 182:Src/control.c **** /****************************************************************************************
+ 183:Src/control.c ****  * outline  : call 1ms (control yawrate by feadbuck)
+ 184:Src/control.c ****  * argument : void
+ 185:Src/control.c ****  * return   : void
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 17
+
+
+ 186:Src/control.c **** ********************************************************************************************/
+ 187:Src/control.c **** void Yawrate_SysTic_fb(void){
+ 731              		.loc 1 187 0
+ 732              		.cfi_startproc
+ 733              		@ args = 0, pretend = 0, frame = 0
+ 734              		@ frame_needed = 0, uses_anonymous_args = 0
+ 735 0000 08B5     		push	{r3, lr}
+ 736              	.LCFI9:
+ 737              		.cfi_def_cfa_offset 8
+ 738              		.cfi_offset 3, -8
+ 739              		.cfi_offset 14, -4
+ 188:Src/control.c ****     if(flag.yawrate_zero==ON){
+ 740              		.loc 1 188 0
+ 741 0002 2B4B     		ldr	r3, .L51
+ 742 0004 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 743 0006 DBB2     		uxtb	r3, r3
+ 744 0008 012B     		cmp	r3, #1
+ 745 000a 17D0     		beq	.L47
+ 189:Src/control.c ****         calc.yawrate_velocity = 0;
+ 190:Src/control.c ****     }
+ 191:Src/control.c ****     else if(yawrate_cnt < y_accel_T){
+ 746              		.loc 1 191 0
+ 747 000c 294B     		ldr	r3, .L51+4
+ 748 000e 1A88     		ldrh	r2, [r3]
+ 749 0010 294B     		ldr	r3, .L51+8
+ 750 0012 1B88     		ldrh	r3, [r3]
+ 751 0014 9A42     		cmp	r2, r3
+ 752 0016 38D3     		bcc	.L48
+ 192:Src/control.c ****         Calc_Palam(Y_ACCEL,&calc.yawrate_velocity,&yawrate_cnt);
+ 193:Src/control.c ****     }else if(yawrate_cnt < y_constant_T + y_accel_T){
+ 753              		.loc 1 193 0
+ 754 0018 2849     		ldr	r1, .L51+12
+ 755 001a 0888     		ldrh	r0, [r1]
+ 756 001c C118     		adds	r1, r0, r3
+ 757 001e 8A42     		cmp	r2, r1
+ 758 0020 3ADB     		blt	.L49
+ 194:Src/control.c ****         Calc_Palam(0,&calc.yawrate_velocity,&yawrate_cnt);
+ 195:Src/control.c ****     }else if(yawrate_cnt < y_decrease_T + y_constant_T + y_accel_T){
+ 759              		.loc 1 195 0
+ 760 0022 2749     		ldr	r1, .L51+16
+ 761 0024 0988     		ldrh	r1, [r1]
+ 762 0026 0144     		add	r1, r1, r0
+ 763 0028 0B44     		add	r3, r3, r1
+ 764 002a 9A42     		cmp	r2, r3
+ 765 002c 3ADB     		blt	.L50
+ 196:Src/control.c ****         Calc_Palam(-Y_ACCEL,&calc.yawrate_velocity,&yawrate_cnt);
+ 197:Src/control.c ****     }else{
+ 198:Src/control.c ****         calc.yawrate_velocity = 0;
+ 766              		.loc 1 198 0
+ 767 002e 0023     		movs	r3, #0
+ 768 0030 244A     		ldr	r2, .L51+20
+ 769 0032 9381     		strh	r3, [r2, #12]	@ movhi
+ 199:Src/control.c ****         //if(gyro.velocity==0){
+ 200:Src/control.c ****             flag.yawrate = OFF;
+ 770              		.loc 1 200 0
+ 771 0034 1E4A     		ldr	r2, .L51
+ 772 0036 9370     		strb	r3, [r2, #2]
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 18
+
+
+ 201:Src/control.c ****             flag.straight = OFF;
+ 773              		.loc 1 201 0
+ 774 0038 5370     		strb	r3, [r2, #1]
+ 775 003a 02E0     		b	.L42
+ 776              	.L47:
+ 189:Src/control.c ****     }
+ 777              		.loc 1 189 0
+ 778 003c 214B     		ldr	r3, .L51+20
+ 779 003e 0022     		movs	r2, #0
+ 780 0040 9A81     		strh	r2, [r3, #12]	@ movhi
+ 781              	.L42:
+ 202:Src/control.c ****         //}
+ 203:Src/control.c ****     }
+ 204:Src/control.c ****     yawrate_pid = (int16_t)PID_value((float)flag.dir * calc.yawrate_velocity,gyro.velocity,&y_sum,&
+ 782              		.loc 1 204 0
+ 783 0042 1B4B     		ldr	r3, .L51
+ 784 0044 DB88     		ldrh	r3, [r3, #6]
+ 785 0046 1BB2     		sxth	r3, r3
+ 786 0048 07EE903A 		vmov	s15, r3	@ int
+ 787 004c F8EEE77A 		vcvt.f32.s32	s15, s15
+ 788 0050 1C4B     		ldr	r3, .L51+20
+ 789 0052 B3F90C30 		ldrsh	r3, [r3, #12]
+ 790 0056 00EE103A 		vmov	s0, r3	@ int
+ 791 005a 1B4B     		ldr	r3, .L51+24
+ 792 005c B8EEC00A 		vcvt.f32.s32	s0, s0
+ 793 0060 B1EE002A 		vmov.f32	s4, #4.0e+0
+ 794 0064 F2EE021A 		vmov.f32	s3, #9.0e+0
+ 795 0068 9FED181A 		vldr.32	s2, .L51+28
+ 796 006c 1946     		mov	r1, r3
+ 797 006e 1848     		ldr	r0, .L51+32
+ 798 0070 D3ED020A 		vldr.32	s1, [r3, #8]
+ 799 0074 20EE270A 		vmul.f32	s0, s0, s15
+ 800 0078 FFF7FEFF 		bl	PID_value
+ 801              	.LVL68:
+ 802 007c BDEEC00A 		vcvt.s32.f32	s0, s0
+ 803 0080 144B     		ldr	r3, .L51+36
+ 804 0082 10EE102A 		vmov	r2, s0	@ int
+ 805 0086 1A80     		strh	r2, [r3]	@ movhi
+ 205:Src/control.c **** }
+ 806              		.loc 1 205 0
+ 807 0088 08BD     		pop	{r3, pc}
+ 808              	.L48:
+ 192:Src/control.c ****     }else if(yawrate_cnt < y_constant_T + y_accel_T){
+ 809              		.loc 1 192 0
+ 810 008a 0A4A     		ldr	r2, .L51+4
+ 811 008c 1249     		ldr	r1, .L51+40
+ 812 008e 4FF4FA60 		mov	r0, #2000
+ 813 0092 FFF7FEFF 		bl	Calc_Palam
+ 814              	.LVL69:
+ 815 0096 D4E7     		b	.L42
+ 816              	.L49:
+ 194:Src/control.c ****     }else if(yawrate_cnt < y_decrease_T + y_constant_T + y_accel_T){
+ 817              		.loc 1 194 0
+ 818 0098 064A     		ldr	r2, .L51+4
+ 819 009a 0F49     		ldr	r1, .L51+40
+ 820 009c 0020     		movs	r0, #0
+ 821 009e FFF7FEFF 		bl	Calc_Palam
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 19
+
+
+ 822              	.LVL70:
+ 823 00a2 CEE7     		b	.L42
+ 824              	.L50:
+ 196:Src/control.c ****     }else{
+ 825              		.loc 1 196 0
+ 826 00a4 034A     		ldr	r2, .L51+4
+ 827 00a6 0C49     		ldr	r1, .L51+40
+ 828 00a8 0C48     		ldr	r0, .L51+44
+ 829 00aa FFF7FEFF 		bl	Calc_Palam
+ 830              	.LVL71:
+ 831 00ae C8E7     		b	.L42
+ 832              	.L52:
+ 833              		.align	2
+ 834              	.L51:
+ 835 00b0 00000000 		.word	flag
+ 836 00b4 00000000 		.word	yawrate_cnt
+ 837 00b8 00000000 		.word	y_accel_T
+ 838 00bc 00000000 		.word	y_constant_T
+ 839 00c0 00000000 		.word	y_decrease_T
+ 840 00c4 00000000 		.word	calc
+ 841 00c8 08000000 		.word	gyro+8
+ 842 00cc 1F856B3F 		.word	1064011039
+ 843 00d0 00000000 		.word	y_sum
+ 844 00d4 00000000 		.word	yawrate_pid
+ 845 00d8 0C000000 		.word	calc+12
+ 846 00dc 30F8FFFF 		.word	-2000
+ 847              		.cfi_endproc
+ 848              	.LFE167:
+ 850              		.section	.text.Control_Wall,"ax",%progbits
+ 851              		.align	1
+ 852              		.global	Control_Wall
+ 853              		.syntax unified
+ 854              		.thumb
+ 855              		.thumb_func
+ 856              		.fpu fpv4-sp-d16
+ 858              	Control_Wall:
+ 859              	.LFB168:
+ 206:Src/control.c **** 
+ 207:Src/control.c **** void Control_Wall(void){
+ 860              		.loc 1 207 0
+ 861              		.cfi_startproc
+ 862              		@ args = 0, pretend = 0, frame = 0
+ 863              		@ frame_needed = 0, uses_anonymous_args = 0
+ 864 0000 08B5     		push	{r3, lr}
+ 865              	.LCFI10:
+ 866              		.cfi_def_cfa_offset 8
+ 867              		.cfi_offset 3, -8
+ 868              		.cfi_offset 14, -4
+ 869              	.LVL72:
+ 208:Src/control.c ****     int16_t wall_dif = 0;
+ 209:Src/control.c **** 
+ 210:Src/control.c ****     wall_dif = (sen_l.now - 573 ) - (sen_r.now - 670 );
+ 870              		.loc 1 210 0
+ 871 0002 0E4B     		ldr	r3, .L55
+ 872 0004 1B88     		ldrh	r3, [r3]
+ 873 0006 0E4A     		ldr	r2, .L55+4
+ 874 0008 B2F90020 		ldrsh	r2, [r2]
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 20
+
+
+ 875 000c 91B2     		uxth	r1, r2
+ 876 000e 5B1A     		subs	r3, r3, r1
+ 877 0010 6133     		adds	r3, r3, #97
+ 878 0012 1BB2     		sxth	r3, r3
+ 879 0014 07EE903A 		vmov	s15, r3	@ int
+ 880              	.LVL73:
+ 211:Src/control.c ****     wall_pid = (int16_t)(0.1f * (float)wall_dif);
+ 881              		.loc 1 211 0
+ 882 0018 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 883              	.LVL74:
+ 884 001c 9FED097A 		vldr.32	s14, .L55+8
+ 885 0020 67EE877A 		vmul.f32	s15, s15, s14
+ 886 0024 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 887 0028 17EE903A 		vmov	r3, s15	@ int
+ 888              	.LVL75:
+ 889 002c 19B2     		sxth	r1, r3
+ 890              	.LVL76:
+ 891 002e 064B     		ldr	r3, .L55+12
+ 892 0030 1980     		strh	r1, [r3]	@ movhi
+ 212:Src/control.c **** 
+ 213:Src/control.c ****     printf("%d\t%d\r\n",wall_pid,sen_r.now);
+ 893              		.loc 1 213 0
+ 894 0032 0648     		ldr	r0, .L55+16
+ 895 0034 FFF7FEFF 		bl	printf
+ 896              	.LVL77:
+ 214:Src/control.c **** }
+ 897              		.loc 1 214 0
+ 898 0038 08BD     		pop	{r3, pc}
+ 899              	.L56:
+ 900 003a 00BF     		.align	2
+ 901              	.L55:
+ 902 003c 00000000 		.word	sen_l
+ 903 0040 00000000 		.word	sen_r
+ 904 0044 CDCCCC3D 		.word	1036831949
+ 905 0048 00000000 		.word	wall_pid
+ 906 004c 00000000 		.word	.LC0
+ 907              		.cfi_endproc
+ 908              	.LFE168:
+ 910              		.section	.text.Control_pwm,"ax",%progbits
+ 911              		.align	1
+ 912              		.global	Control_pwm
+ 913              		.syntax unified
+ 914              		.thumb
+ 915              		.thumb_func
+ 916              		.fpu fpv4-sp-d16
+ 918              	Control_pwm:
+ 919              	.LFB169:
+ 215:Src/control.c **** 
+ 216:Src/control.c **** void Control_pwm(void){
+ 920              		.loc 1 216 0
+ 921              		.cfi_startproc
+ 922              		@ args = 0, pretend = 0, frame = 0
+ 923              		@ frame_needed = 0, uses_anonymous_args = 0
+ 924 0000 08B5     		push	{r3, lr}
+ 925              	.LCFI11:
+ 926              		.cfi_def_cfa_offset 8
+ 927              		.cfi_offset 3, -8
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 21
+
+
+ 928              		.cfi_offset 14, -4
+ 929              	.LVL78:
+ 217:Src/control.c ****     int16_t pwm_l=0,pwm_r=0;
+ 218:Src/control.c ****     if(flag.wall==ON){
+ 930              		.loc 1 218 0
+ 931 0002 154B     		ldr	r3, .L66
+ 932 0004 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 933 0006 DBB2     		uxtb	r3, r3
+ 934 0008 012B     		cmp	r3, #1
+ 935 000a 0ED0     		beq	.L63
+ 217:Src/control.c ****     int16_t pwm_l=0,pwm_r=0;
+ 936              		.loc 1 217 0
+ 937 000c 0021     		movs	r1, #0
+ 938 000e 0846     		mov	r0, r1
+ 939              	.LVL79:
+ 940              	.L58:
+ 219:Src/control.c ****         pwm_l += wall_pid;
+ 220:Src/control.c ****         pwm_r -= wall_pid;
+ 221:Src/control.c ****     }
+ 222:Src/control.c **** 
+ 223:Src/control.c ****     if(flag.straight==ON){
+ 941              		.loc 1 223 0
+ 942 0010 114B     		ldr	r3, .L66
+ 943 0012 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 944 0014 DBB2     		uxtb	r3, r3
+ 945 0016 012B     		cmp	r3, #1
+ 946 0018 0ED0     		beq	.L64
+ 947              	.L59:
+ 224:Src/control.c ****         pwm_l += straight_pid_l;
+ 225:Src/control.c ****         pwm_r += straight_pid_r;
+ 226:Src/control.c ****     }
+ 227:Src/control.c ****     if(flag.yawrate==ON){
+ 948              		.loc 1 227 0
+ 949 001a 0F4B     		ldr	r3, .L66
+ 950 001c 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 951 001e DBB2     		uxtb	r3, r3
+ 952 0020 012B     		cmp	r3, #1
+ 953 0022 12D0     		beq	.L65
+ 954              	.L60:
+ 228:Src/control.c ****         pwm_l -= yawrate_pid;
+ 229:Src/control.c ****         pwm_r += yawrate_pid;
+ 230:Src/control.c ****     }
+ 231:Src/control.c ****     Motor_pwm(pwm_l,pwm_r);
+ 955              		.loc 1 231 0
+ 956 0024 FFF7FEFF 		bl	Motor_pwm
+ 957              	.LVL80:
+ 232:Src/control.c **** }
+ 958              		.loc 1 232 0
+ 959 0028 08BD     		pop	{r3, pc}
+ 960              	.LVL81:
+ 961              	.L63:
+ 219:Src/control.c ****         pwm_r -= wall_pid;
+ 962              		.loc 1 219 0
+ 963 002a 0C4B     		ldr	r3, .L66+4
+ 964 002c B3F90000 		ldrsh	r0, [r3]
+ 965 0030 81B2     		uxth	r1, r0
+ 966              	.LVL82:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 22
+
+
+ 220:Src/control.c ****     }
+ 967              		.loc 1 220 0
+ 968 0032 4942     		negs	r1, r1
+ 969 0034 09B2     		sxth	r1, r1
+ 970              	.LVL83:
+ 971 0036 EBE7     		b	.L58
+ 972              	.L64:
+ 224:Src/control.c ****         pwm_r += straight_pid_r;
+ 973              		.loc 1 224 0
+ 974 0038 094B     		ldr	r3, .L66+8
+ 975 003a 1B88     		ldrh	r3, [r3]
+ 976 003c 1844     		add	r0, r0, r3
+ 977              	.LVL84:
+ 978 003e 00B2     		sxth	r0, r0
+ 979              	.LVL85:
+ 225:Src/control.c ****     }
+ 980              		.loc 1 225 0
+ 981 0040 084B     		ldr	r3, .L66+12
+ 982 0042 1B88     		ldrh	r3, [r3]
+ 983 0044 1944     		add	r1, r1, r3
+ 984              	.LVL86:
+ 985 0046 09B2     		sxth	r1, r1
+ 986              	.LVL87:
+ 987 0048 E7E7     		b	.L59
+ 988              	.L65:
+ 228:Src/control.c ****         pwm_r += yawrate_pid;
+ 989              		.loc 1 228 0
+ 990 004a 074B     		ldr	r3, .L66+16
+ 991 004c 1B88     		ldrh	r3, [r3]
+ 992 004e C01A     		subs	r0, r0, r3
+ 993              	.LVL88:
+ 994 0050 00B2     		sxth	r0, r0
+ 995              	.LVL89:
+ 229:Src/control.c ****     }
+ 996              		.loc 1 229 0
+ 997 0052 1944     		add	r1, r1, r3
+ 998              	.LVL90:
+ 999 0054 09B2     		sxth	r1, r1
+ 1000              	.LVL91:
+ 1001 0056 E5E7     		b	.L60
+ 1002              	.L67:
+ 1003              		.align	2
+ 1004              	.L66:
+ 1005 0058 00000000 		.word	flag
+ 1006 005c 00000000 		.word	wall_pid
+ 1007 0060 00000000 		.word	straight_pid_l
+ 1008 0064 00000000 		.word	straight_pid_r
+ 1009 0068 00000000 		.word	yawrate_pid
+ 1010              		.cfi_endproc
+ 1011              	.LFE169:
+ 1013              		.section	.text.Output_Buzzer,"ax",%progbits
+ 1014              		.align	1
+ 1015              		.global	Output_Buzzer
+ 1016              		.syntax unified
+ 1017              		.thumb
+ 1018              		.thumb_func
+ 1019              		.fpu fpv4-sp-d16
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 23
+
+
+ 1021              	Output_Buzzer:
+ 1022              	.LFB170:
+ 233:Src/control.c **** /****************************************************************************************
+ 234:Src/control.c ****  * outline  : turn on buzzer 0.3sec
+ 235:Src/control.c ****  * argument : Hz
+ 236:Src/control.c ****  * return   : void
+ 237:Src/control.c **** ********************************************************************************************/
+ 238:Src/control.c **** void Output_Buzzer(uint8_t Hz){
+ 1023              		.loc 1 238 0
+ 1024              		.cfi_startproc
+ 1025              		@ args = 0, pretend = 0, frame = 0
+ 1026              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1027              	.LVL92:
+ 1028 0000 08B5     		push	{r3, lr}
+ 1029              	.LCFI12:
+ 1030              		.cfi_def_cfa_offset 8
+ 1031              		.cfi_offset 3, -8
+ 1032              		.cfi_offset 14, -4
+ 239:Src/control.c ****     Buzzer_pwm(Hz,300);
+ 1033              		.loc 1 239 0
+ 1034 0002 4FF49671 		mov	r1, #300
+ 1035 0006 FFF7FEFF 		bl	Buzzer_pwm
+ 1036              	.LVL93:
+ 240:Src/control.c ****     HAL_Delay(100);
+ 1037              		.loc 1 240 0
+ 1038 000a 6420     		movs	r0, #100
+ 1039 000c FFF7FEFF 		bl	HAL_Delay
+ 1040              	.LVL94:
+ 241:Src/control.c ****     Buzzer_pwm(HZ_NORMAL,0);
+ 1041              		.loc 1 241 0
+ 1042 0010 0021     		movs	r1, #0
+ 1043 0012 0A20     		movs	r0, #10
+ 1044 0014 FFF7FEFF 		bl	Buzzer_pwm
+ 1045              	.LVL95:
+ 242:Src/control.c **** }
+ 1046              		.loc 1 242 0
+ 1047 0018 08BD     		pop	{r3, pc}
+ 1048              		.cfi_endproc
+ 1049              	.LFE170:
+ 1051              		.section	.text.Sensor_Check,"ax",%progbits
+ 1052              		.align	1
+ 1053              		.global	Sensor_Check
+ 1054              		.syntax unified
+ 1055              		.thumb
+ 1056              		.thumb_func
+ 1057              		.fpu fpv4-sp-d16
+ 1059              	Sensor_Check:
+ 1060              	.LFB171:
+ 243:Src/control.c **** 
+ 244:Src/control.c **** 
+ 245:Src/control.c **** /****************************************************************************************
+ 246:Src/control.c ****  * outline  : sensor check
+ 247:Src/control.c ****  * argument : void
+ 248:Src/control.c ****  * return   : void
+ 249:Src/control.c **** ********************************************************************************************/
+ 250:Src/control.c **** void Sensor_Check(void){
+ 1061              		.loc 1 250 0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 24
+
+
+ 1062              		.cfi_startproc
+ 1063              		@ args = 0, pretend = 0, frame = 0
+ 1064              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1065 0000 10B5     		push	{r4, lr}
+ 1066              	.LCFI13:
+ 1067              		.cfi_def_cfa_offset 8
+ 1068              		.cfi_offset 4, -8
+ 1069              		.cfi_offset 14, -4
+ 251:Src/control.c ****     if(sen_r.is_wall==true){
+ 1070              		.loc 1 251 0
+ 1071 0002 204B     		ldr	r3, .L81
+ 1072 0004 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 1073 0006 012B     		cmp	r3, #1
+ 1074 0008 20D0     		beq	.L78
+ 252:Src/control.c ****         HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_RESET);
+ 253:Src/control.c ****     }else{
+ 254:Src/control.c ****         HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_SET);
+ 1075              		.loc 1 254 0
+ 1076 000a 0122     		movs	r2, #1
+ 1077 000c 4FF40051 		mov	r1, #8192
+ 1078 0010 1D48     		ldr	r0, .L81+4
+ 1079 0012 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1080              	.LVL96:
+ 1081              	.L72:
+ 255:Src/control.c ****     }
+ 256:Src/control.c ****     if(sen_l.is_wall==true){
+ 1082              		.loc 1 256 0
+ 1083 0016 1D4B     		ldr	r3, .L81+8
+ 1084 0018 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 1085 001a 012B     		cmp	r3, #1
+ 1086 001c 1DD0     		beq	.L79
+ 257:Src/control.c ****         HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_RESET);
+ 258:Src/control.c ****     }else{
+ 259:Src/control.c ****         HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_SET);
+ 1087              		.loc 1 259 0
+ 1088 001e 0122     		movs	r2, #1
+ 1089 0020 4FF48041 		mov	r1, #16384
+ 1090 0024 1848     		ldr	r0, .L81+4
+ 1091 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1092              	.LVL97:
+ 1093              	.L74:
+ 260:Src/control.c ****     }
+ 261:Src/control.c ****     if(sen_front.is_wall==true){
+ 1094              		.loc 1 261 0
+ 1095 002a 194B     		ldr	r3, .L81+12
+ 1096 002c 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 1097 002e 012B     		cmp	r3, #1
+ 1098 0030 1AD0     		beq	.L80
+ 262:Src/control.c ****         HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_RESET);
+ 263:Src/control.c ****         HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_RESET);
+ 264:Src/control.c ****     }else{
+ 265:Src/control.c ****         HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_SET);
+ 1099              		.loc 1 265 0
+ 1100 0032 154C     		ldr	r4, .L81+4
+ 1101 0034 0122     		movs	r2, #1
+ 1102 0036 4FF48071 		mov	r1, #256
+ 1103 003a 2046     		mov	r0, r4
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 25
+
+
+ 1104 003c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1105              	.LVL98:
+ 266:Src/control.c ****         HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_SET);
+ 1106              		.loc 1 266 0
+ 1107 0040 0122     		movs	r2, #1
+ 1108 0042 8021     		movs	r1, #128
+ 1109 0044 2046     		mov	r0, r4
+ 1110 0046 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1111              	.LVL99:
+ 1112              	.L70:
+ 267:Src/control.c ****     } 
+ 268:Src/control.c **** }
+ 1113              		.loc 1 268 0
+ 1114 004a 10BD     		pop	{r4, pc}
+ 1115              	.L78:
+ 252:Src/control.c ****     }else{
+ 1116              		.loc 1 252 0
+ 1117 004c 0022     		movs	r2, #0
+ 1118 004e 4FF40051 		mov	r1, #8192
+ 1119 0052 0D48     		ldr	r0, .L81+4
+ 1120 0054 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1121              	.LVL100:
+ 1122 0058 DDE7     		b	.L72
+ 1123              	.L79:
+ 257:Src/control.c ****     }else{
+ 1124              		.loc 1 257 0
+ 1125 005a 0022     		movs	r2, #0
+ 1126 005c 4FF48041 		mov	r1, #16384
+ 1127 0060 0948     		ldr	r0, .L81+4
+ 1128 0062 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1129              	.LVL101:
+ 1130 0066 E0E7     		b	.L74
+ 1131              	.L80:
+ 262:Src/control.c ****         HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_RESET);
+ 1132              		.loc 1 262 0
+ 1133 0068 074C     		ldr	r4, .L81+4
+ 1134 006a 0022     		movs	r2, #0
+ 1135 006c 4FF48071 		mov	r1, #256
+ 1136 0070 2046     		mov	r0, r4
+ 1137 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1138              	.LVL102:
+ 263:Src/control.c ****     }else{
+ 1139              		.loc 1 263 0
+ 1140 0076 0022     		movs	r2, #0
+ 1141 0078 8021     		movs	r1, #128
+ 1142 007a 2046     		mov	r0, r4
+ 1143 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1144              	.LVL103:
+ 1145 0080 E3E7     		b	.L70
+ 1146              	.L82:
+ 1147 0082 00BF     		.align	2
+ 1148              	.L81:
+ 1149 0084 00000000 		.word	sen_r
+ 1150 0088 00080240 		.word	1073874944
+ 1151 008c 00000000 		.word	sen_l
+ 1152 0090 00000000 		.word	sen_front
+ 1153              		.cfi_endproc
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 26
+
+
+ 1154              	.LFE171:
+ 1156              		.global	encoder_Kd
+ 1157              		.global	encoder_Ki
+ 1158              		.global	encoder_Kp
+ 1159              		.comm	straight_dir,1,1
+ 1160              		.comm	wall_pid,2,2
+ 1161              		.comm	yawrate_pid,2,2
+ 1162              		.comm	straight_pid_r,2,2
+ 1163              		.comm	straight_pid_l,2,2
+ 1164              		.comm	w_befor,4,4
+ 1165              		.comm	w_sum,4,4
+ 1166              		.comm	y_sumsum,4,4
+ 1167              		.comm	y_sum,4,4
+ 1168              		.comm	s_sum_r,4,4
+ 1169              		.comm	s_sum_l,4,4
+ 1170              		.section	.bss.encoder_Kd,"aw",%nobits
+ 1171              		.align	2
+ 1172              		.set	.LANCHOR2,. + 0
+ 1175              	encoder_Kd:
+ 1176 0000 00000000 		.space	4
+ 1177              		.section	.bss.encoder_Ki,"aw",%nobits
+ 1178              		.align	2
+ 1179              		.set	.LANCHOR1,. + 0
+ 1182              	encoder_Ki:
+ 1183 0000 00000000 		.space	4
+ 1184              		.section	.bss.encoder_Kp,"aw",%nobits
+ 1185              		.align	2
+ 1186              		.set	.LANCHOR0,. + 0
+ 1189              	encoder_Kp:
+ 1190 0000 00000000 		.space	4
+ 1191              		.section	.rodata.Control_Wall.str1.4,"aMS",%progbits,1
+ 1192              		.align	2
+ 1193              	.LC0:
+ 1194 0000 25640925 		.ascii	"%d\011%d\015\012\000"
+ 1194      640D0A00 
+ 1195              		.text
+ 1196              	.Letext0:
+ 1197              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1198              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1199              		.file 4 "Inc/control.h"
+ 1200              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1201              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1202              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi
+ 1203              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1204              		.file 9 "Inc/global.h"
+ 1205              		.file 10 "Drivers/CMSIS/Include/core_cm4.h"
+ 1206              		.file 11 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 1207              		.file 12 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 1208              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1209              		.file 14 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 1210              		.file 15 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1211              		.file 16 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 1212              		.file 17 "Inc/tim.h"
+ 1213              		.file 18 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
+ 1214              		.file 19 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1215              		.file 20 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 control.c
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:18     .text.PID_value:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:25     .text.PID_value:00000000 PID_value
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:66     .text.PID_value:0000003c $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:71     .text.Integral_value:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:78     .text.Integral_value:00000000 Integral_value
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:101    .text.Integral_value:0000001c $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:106    .text.Calc_Palam:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:113    .text.Calc_Palam:00000000 Calc_Palam
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:142    .text.Calc_Palam:00000034 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:147    .text.Straight_Calc_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:154    .text.Straight_Calc_fb:00000000 Straight_Calc_fb
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:290    .text.Straight_Calc_fb:000000d8 $d
+                            *COM*:00000004 s_sum_l
+                            *COM*:00000001 straight_dir
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:309    .text.Straight_Calc_Zero:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:316    .text.Straight_Calc_Zero:00000000 Straight_Calc_Zero
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:344    .text.Straight_Calc_Zero:0000001c $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:353    .text.Straight_SysTic_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:360    .text.Straight_SysTic_fb:00000000 Straight_SysTic_fb
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:550    .text.Straight_SysTic_fb:00000124 $d
+                            *COM*:00000002 straight_pid_l
+                            *COM*:00000004 s_sum_r
+                            *COM*:00000002 straight_pid_r
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:572    .text.Yawrate_Calc_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:579    .text.Yawrate_Calc_fb:00000000 Yawrate_Calc_fb
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:680    .text.Yawrate_Calc_fb:000000b8 $d
+                            *COM*:00000004 y_sum
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:694    .text.Yawrate_Calc_Zero:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:701    .text.Yawrate_Calc_Zero:00000000 Yawrate_Calc_Zero
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:717    .text.Yawrate_Calc_Zero:00000008 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:722    .text.Yawrate_SysTic_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:729    .text.Yawrate_SysTic_fb:00000000 Yawrate_SysTic_fb
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:835    .text.Yawrate_SysTic_fb:000000b0 $d
+                            *COM*:00000002 yawrate_pid
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:851    .text.Control_Wall:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:858    .text.Control_Wall:00000000 Control_Wall
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:902    .text.Control_Wall:0000003c $d
+                            *COM*:00000002 wall_pid
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:911    .text.Control_pwm:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:918    .text.Control_pwm:00000000 Control_pwm
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1005   .text.Control_pwm:00000058 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1014   .text.Output_Buzzer:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1021   .text.Output_Buzzer:00000000 Output_Buzzer
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1052   .text.Sensor_Check:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1059   .text.Sensor_Check:00000000 Sensor_Check
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1149   .text.Sensor_Check:00000084 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1175   .bss.encoder_Kd:00000000 encoder_Kd
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1182   .bss.encoder_Ki:00000000 encoder_Ki
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1189   .bss.encoder_Kp:00000000 encoder_Kp
+                            *COM*:00000004 w_befor
+                            *COM*:00000004 w_sum
+                            *COM*:00000004 y_sumsum
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1171   .bss.encoder_Kd:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1178   .bss.encoder_Ki:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1185   .bss.encoder_Kp:00000000 $d
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s 			page 28
+
+
+C:\Users\kotaro\AppData\Local\Temp\ccetgZOc.s:1192   .rodata.Control_Wall.str1.4:00000000 $d
+
+UNDEFINED SYMBOLS
+calc
+enc
+flag
+accel_T
+constant_T
+decrease_T
+straight_cnt
+gyro
+y_accel_T
+y_constant_T
+y_decrease_T
+yawrate_cnt
+printf
+sen_l
+sen_r
+Motor_pwm
+Buzzer_pwm
+HAL_Delay
+HAL_GPIO_WritePin
+sen_front

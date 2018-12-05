@@ -1,0 +1,652 @@
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_GPIO_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	MX_GPIO_Init:
+  26              	.LFB126:
+  27              		.file 1 "Src/gpio.c"
+   1:Src/gpio.c    **** /**
+   2:Src/gpio.c    ****   ******************************************************************************
+   3:Src/gpio.c    ****   * File Name          : gpio.c
+   4:Src/gpio.c    ****   * Description        : This file provides code for the configuration
+   5:Src/gpio.c    ****   *                      of all used GPIO pins.
+   6:Src/gpio.c    ****   ******************************************************************************
+   7:Src/gpio.c    ****   ** This notice applies to any and all portions of this file
+   8:Src/gpio.c    ****   * that are not between comment pairs USER CODE BEGIN and
+   9:Src/gpio.c    ****   * USER CODE END. Other portions of this file, whether 
+  10:Src/gpio.c    ****   * inserted by the user or by software development tools
+  11:Src/gpio.c    ****   * are owned by their respective copyright owners.
+  12:Src/gpio.c    ****   *
+  13:Src/gpio.c    ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  14:Src/gpio.c    ****   *
+  15:Src/gpio.c    ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:Src/gpio.c    ****   * are permitted provided that the following conditions are met:
+  17:Src/gpio.c    ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:Src/gpio.c    ****   *      this list of conditions and the following disclaimer.
+  19:Src/gpio.c    ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:Src/gpio.c    ****   *      this list of conditions and the following disclaimer in the documentation
+  21:Src/gpio.c    ****   *      and/or other materials provided with the distribution.
+  22:Src/gpio.c    ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:Src/gpio.c    ****   *      may be used to endorse or promote products derived from this software
+  24:Src/gpio.c    ****   *      without specific prior written permission.
+  25:Src/gpio.c    ****   *
+  26:Src/gpio.c    ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:Src/gpio.c    ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:Src/gpio.c    ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:Src/gpio.c    ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:Src/gpio.c    ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:Src/gpio.c    ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 2
+
+
+  32:Src/gpio.c    ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:Src/gpio.c    ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:Src/gpio.c    ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:Src/gpio.c    ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:Src/gpio.c    ****   *
+  37:Src/gpio.c    ****   ******************************************************************************
+  38:Src/gpio.c    ****   */
+  39:Src/gpio.c    **** 
+  40:Src/gpio.c    **** /* Includes ------------------------------------------------------------------*/
+  41:Src/gpio.c    **** #include "gpio.h"
+  42:Src/gpio.c    **** /* USER CODE BEGIN 0 */
+  43:Src/gpio.c    **** #include "global.h"
+  44:Src/gpio.c    **** /* USER CODE END 0 */
+  45:Src/gpio.c    **** 
+  46:Src/gpio.c    **** /*----------------------------------------------------------------------------*/
+  47:Src/gpio.c    **** /* Configure GPIO                                                             */
+  48:Src/gpio.c    **** /*----------------------------------------------------------------------------*/
+  49:Src/gpio.c    **** /* USER CODE BEGIN 1 */
+  50:Src/gpio.c    **** 
+  51:Src/gpio.c    **** /* USER CODE END 1 */
+  52:Src/gpio.c    **** 
+  53:Src/gpio.c    **** /** Configure pins as 
+  54:Src/gpio.c    ****         * Analog 
+  55:Src/gpio.c    ****         * Input 
+  56:Src/gpio.c    ****         * Output
+  57:Src/gpio.c    ****         * EVENT_OUT
+  58:Src/gpio.c    ****         * EXTI
+  59:Src/gpio.c    **** */
+  60:Src/gpio.c    **** void MX_GPIO_Init(void)
+  61:Src/gpio.c    **** {
+  28              		.loc 1 61 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 40
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 20
+  35              		.cfi_offset 4, -20
+  36              		.cfi_offset 5, -16
+  37              		.cfi_offset 6, -12
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 8BB0     		sub	sp, sp, #44
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 64
+  43              	.LBB2:
+  62:Src/gpio.c    **** 
+  63:Src/gpio.c    ****   GPIO_InitTypeDef GPIO_InitStruct;
+  64:Src/gpio.c    **** 
+  65:Src/gpio.c    ****   /* GPIO Ports Clock Enable */
+  66:Src/gpio.c    ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  44              		.loc 1 66 0
+  45 0004 0024     		movs	r4, #0
+  46 0006 0194     		str	r4, [sp, #4]
+  47 0008 2A4B     		ldr	r3, .L3
+  48 000a 1A6B     		ldr	r2, [r3, #48]
+  49 000c 42F00402 		orr	r2, r2, #4
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 3
+
+
+  50 0010 1A63     		str	r2, [r3, #48]
+  51 0012 1A6B     		ldr	r2, [r3, #48]
+  52 0014 02F00402 		and	r2, r2, #4
+  53 0018 0192     		str	r2, [sp, #4]
+  54 001a 019A     		ldr	r2, [sp, #4]
+  55              	.LBE2:
+  56              	.LBB3:
+  67:Src/gpio.c    ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  57              		.loc 1 67 0
+  58 001c 0294     		str	r4, [sp, #8]
+  59 001e 1A6B     		ldr	r2, [r3, #48]
+  60 0020 42F00102 		orr	r2, r2, #1
+  61 0024 1A63     		str	r2, [r3, #48]
+  62 0026 1A6B     		ldr	r2, [r3, #48]
+  63 0028 02F00102 		and	r2, r2, #1
+  64 002c 0292     		str	r2, [sp, #8]
+  65 002e 029A     		ldr	r2, [sp, #8]
+  66              	.LBE3:
+  67              	.LBB4:
+  68:Src/gpio.c    ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  68              		.loc 1 68 0
+  69 0030 0394     		str	r4, [sp, #12]
+  70 0032 1A6B     		ldr	r2, [r3, #48]
+  71 0034 42F00202 		orr	r2, r2, #2
+  72 0038 1A63     		str	r2, [r3, #48]
+  73 003a 1A6B     		ldr	r2, [r3, #48]
+  74 003c 02F00202 		and	r2, r2, #2
+  75 0040 0392     		str	r2, [sp, #12]
+  76 0042 039A     		ldr	r2, [sp, #12]
+  77              	.LBE4:
+  78              	.LBB5:
+  69:Src/gpio.c    ****   __HAL_RCC_GPIOD_CLK_ENABLE();
+  79              		.loc 1 69 0
+  80 0044 0494     		str	r4, [sp, #16]
+  81 0046 1A6B     		ldr	r2, [r3, #48]
+  82 0048 42F00802 		orr	r2, r2, #8
+  83 004c 1A63     		str	r2, [r3, #48]
+  84 004e 1B6B     		ldr	r3, [r3, #48]
+  85 0050 03F00803 		and	r3, r3, #8
+  86 0054 0493     		str	r3, [sp, #16]
+  87 0056 049B     		ldr	r3, [sp, #16]
+  88              	.LBE5:
+  70:Src/gpio.c    **** 
+  71:Src/gpio.c    ****   /*Configure GPIO pin Output Level */
+  72:Src/gpio.c    ****   HAL_GPIO_WritePin(GPIOC, led0_Pin|led1_Pin|paluse0_Pin|paluse1_Pin 
+  89              		.loc 1 72 0
+  90 0058 174F     		ldr	r7, .L3+4
+  91 005a 2246     		mov	r2, r4
+  92 005c 46F2CF11 		movw	r1, #25039
+  93 0060 3846     		mov	r0, r7
+  94 0062 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  95              	.LVL0:
+  73:Src/gpio.c    ****                           |paluse2_Pin|paluse3_Pin|gyro_int_Pin|led2_Pin 
+  74:Src/gpio.c    ****                           |led3_Pin, GPIO_PIN_RESET);
+  75:Src/gpio.c    **** 
+  76:Src/gpio.c    ****   /*Configure GPIO pin Output Level */
+  77:Src/gpio.c    ****   HAL_GPIO_WritePin(gyro_cs_GPIO_Port, gyro_cs_Pin, GPIO_PIN_RESET);
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 4
+
+
+  96              		.loc 1 77 0
+  97 0066 154D     		ldr	r5, .L3+8
+  98 0068 2246     		mov	r2, r4
+  99 006a 4FF48051 		mov	r1, #4096
+ 100 006e 2846     		mov	r0, r5
+ 101 0070 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 102              	.LVL1:
+  78:Src/gpio.c    **** 
+  79:Src/gpio.c    ****   /*Configure GPIO pins : PCPin PCPin PCPin PCPin 
+  80:Src/gpio.c    ****                            PCPin PCPin PCPin PCPin 
+  81:Src/gpio.c    ****                            PCPin */
+  82:Src/gpio.c    ****   GPIO_InitStruct.Pin = led0_Pin|led1_Pin|paluse0_Pin|paluse1_Pin 
+ 103              		.loc 1 82 0
+ 104 0074 46F2CF13 		movw	r3, #25039
+ 105 0078 0593     		str	r3, [sp, #20]
+  83:Src/gpio.c    ****                           |paluse2_Pin|paluse3_Pin|gyro_int_Pin|led2_Pin 
+  84:Src/gpio.c    ****                           |led3_Pin;
+  85:Src/gpio.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 106              		.loc 1 85 0
+ 107 007a 0126     		movs	r6, #1
+ 108 007c 0696     		str	r6, [sp, #24]
+  86:Src/gpio.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 109              		.loc 1 86 0
+ 110 007e 0794     		str	r4, [sp, #28]
+  87:Src/gpio.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 111              		.loc 1 87 0
+ 112 0080 0894     		str	r4, [sp, #32]
+  88:Src/gpio.c    ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 113              		.loc 1 88 0
+ 114 0082 05A9     		add	r1, sp, #20
+ 115 0084 3846     		mov	r0, r7
+ 116 0086 FFF7FEFF 		bl	HAL_GPIO_Init
+ 117              	.LVL2:
+  89:Src/gpio.c    **** 
+  90:Src/gpio.c    ****   /*Configure GPIO pin : PtPin */
+  91:Src/gpio.c    ****   GPIO_InitStruct.Pin = gyro_cs_Pin;
+ 118              		.loc 1 91 0
+ 119 008a 4FF48053 		mov	r3, #4096
+ 120 008e 0593     		str	r3, [sp, #20]
+  92:Src/gpio.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 121              		.loc 1 92 0
+ 122 0090 0696     		str	r6, [sp, #24]
+  93:Src/gpio.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 123              		.loc 1 93 0
+ 124 0092 0794     		str	r4, [sp, #28]
+  94:Src/gpio.c    ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 125              		.loc 1 94 0
+ 126 0094 0894     		str	r4, [sp, #32]
+  95:Src/gpio.c    ****   HAL_GPIO_Init(gyro_cs_GPIO_Port, &GPIO_InitStruct);
+ 127              		.loc 1 95 0
+ 128 0096 05A9     		add	r1, sp, #20
+ 129 0098 2846     		mov	r0, r5
+ 130 009a FFF7FEFF 		bl	HAL_GPIO_Init
+ 131              	.LVL3:
+  96:Src/gpio.c    **** 
+  97:Src/gpio.c    ****   /*Configure GPIO pin : PtPin */
+  98:Src/gpio.c    ****   GPIO_InitStruct.Pin = push0_Pin;
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 5
+
+
+ 132              		.loc 1 98 0
+ 133 009e 0423     		movs	r3, #4
+ 134 00a0 0593     		str	r3, [sp, #20]
+  99:Src/gpio.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 135              		.loc 1 99 0
+ 136 00a2 0694     		str	r4, [sp, #24]
+ 100:Src/gpio.c    ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 137              		.loc 1 100 0
+ 138 00a4 0794     		str	r4, [sp, #28]
+ 101:Src/gpio.c    ****   HAL_GPIO_Init(push0_GPIO_Port, &GPIO_InitStruct);
+ 139              		.loc 1 101 0
+ 140 00a6 05A9     		add	r1, sp, #20
+ 141 00a8 0548     		ldr	r0, .L3+12
+ 142 00aa FFF7FEFF 		bl	HAL_GPIO_Init
+ 143              	.LVL4:
+ 102:Src/gpio.c    **** 
+ 103:Src/gpio.c    **** }
+ 144              		.loc 1 103 0
+ 145 00ae 0BB0     		add	sp, sp, #44
+ 146              	.LCFI2:
+ 147              		.cfi_def_cfa_offset 20
+ 148              		@ sp needed
+ 149 00b0 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 150              	.L4:
+ 151 00b2 00BF     		.align	2
+ 152              	.L3:
+ 153 00b4 00380240 		.word	1073887232
+ 154 00b8 00080240 		.word	1073874944
+ 155 00bc 00040240 		.word	1073873920
+ 156 00c0 000C0240 		.word	1073875968
+ 157              		.cfi_endproc
+ 158              	.LFE126:
+ 160              		.section	.text.Push,"ax",%progbits
+ 161              		.align	1
+ 162              		.global	Push
+ 163              		.syntax unified
+ 164              		.thumb
+ 165              		.thumb_func
+ 166              		.fpu fpv4-sp-d16
+ 168              	Push:
+ 169              	.LFB127:
+ 104:Src/gpio.c    **** 
+ 105:Src/gpio.c    **** /* USER CODE BEGIN 2 */
+ 106:Src/gpio.c    **** 
+ 107:Src/gpio.c    **** /****************************************************************************************
+ 108:Src/gpio.c    ****  * outline  : push -> ON , else -> OFF
+ 109:Src/gpio.c    ****  * argument : void
+ 110:Src/gpio.c    ****  * return   : ON or OFF
+ 111:Src/gpio.c    **** ********************************************************************************************/
+ 112:Src/gpio.c    **** uint8_t Push(void){
+ 170              		.loc 1 112 0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174 0000 10B5     		push	{r4, lr}
+ 175              	.LCFI3:
+ 176              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 6
+
+
+ 177              		.cfi_offset 4, -8
+ 178              		.cfi_offset 14, -4
+ 113:Src/gpio.c    ****   uint8_t push;
+ 114:Src/gpio.c    ****   if(HAL_GPIO_ReadPin(push0_GPIO_Port,push0_Pin) == GPIO_PIN_RESET){
+ 179              		.loc 1 114 0
+ 180 0002 074C     		ldr	r4, .L9
+ 181 0004 0421     		movs	r1, #4
+ 182 0006 2046     		mov	r0, r4
+ 183 0008 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 184              	.LVL5:
+ 115:Src/gpio.c    ****     push=1;
+ 116:Src/gpio.c    ****   }
+ 117:Src/gpio.c    ****   if(HAL_GPIO_ReadPin(push0_GPIO_Port,push0_Pin) == GPIO_PIN_SET){
+ 185              		.loc 1 117 0
+ 186 000c 0421     		movs	r1, #4
+ 187 000e 2046     		mov	r0, r4
+ 188 0010 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 189              	.LVL6:
+ 190 0014 0128     		cmp	r0, #1
+ 191 0016 01D0     		beq	.L7
+ 192 0018 0120     		movs	r0, #1
+ 193              	.L6:
+ 194              	.LVL7:
+ 118:Src/gpio.c    ****     push = 0;
+ 119:Src/gpio.c    ****   }
+ 120:Src/gpio.c    ****   return push;
+ 121:Src/gpio.c    **** }
+ 195              		.loc 1 121 0
+ 196 001a 10BD     		pop	{r4, pc}
+ 197              	.LVL8:
+ 198              	.L7:
+ 118:Src/gpio.c    ****     push = 0;
+ 199              		.loc 1 118 0
+ 200 001c 0020     		movs	r0, #0
+ 201 001e FCE7     		b	.L6
+ 202              	.L10:
+ 203              		.align	2
+ 204              	.L9:
+ 205 0020 000C0240 		.word	1073875968
+ 206              		.cfi_endproc
+ 207              	.LFE127:
+ 209              		.section	.text.All_LED_ON,"ax",%progbits
+ 210              		.align	1
+ 211              		.global	All_LED_ON
+ 212              		.syntax unified
+ 213              		.thumb
+ 214              		.thumb_func
+ 215              		.fpu fpv4-sp-d16
+ 217              	All_LED_ON:
+ 218              	.LFB128:
+ 122:Src/gpio.c    **** 
+ 123:Src/gpio.c    **** /****************************************************************************************
+ 124:Src/gpio.c    ****  * outline  : turn on all led
+ 125:Src/gpio.c    ****  * argument : void
+ 126:Src/gpio.c    ****  * return   : void
+ 127:Src/gpio.c    **** ********************************************************************************************/
+ 128:Src/gpio.c    **** void All_LED_ON(void)
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 7
+
+
+ 129:Src/gpio.c    **** {
+ 219              		.loc 1 129 0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223 0000 10B5     		push	{r4, lr}
+ 224              	.LCFI4:
+ 225              		.cfi_def_cfa_offset 8
+ 226              		.cfi_offset 4, -8
+ 227              		.cfi_offset 14, -4
+ 130:Src/gpio.c    ****   HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_RESET);
+ 228              		.loc 1 130 0
+ 229 0002 0C4C     		ldr	r4, .L13
+ 230 0004 0022     		movs	r2, #0
+ 231 0006 4FF40051 		mov	r1, #8192
+ 232 000a 2046     		mov	r0, r4
+ 233 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 234              	.LVL9:
+ 131:Src/gpio.c    ****   HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_RESET);
+ 235              		.loc 1 131 0
+ 236 0010 0022     		movs	r2, #0
+ 237 0012 4FF48041 		mov	r1, #16384
+ 238 0016 2046     		mov	r0, r4
+ 239 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 240              	.LVL10:
+ 132:Src/gpio.c    ****   HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_RESET);
+ 241              		.loc 1 132 0
+ 242 001c 0022     		movs	r2, #0
+ 243 001e 8021     		movs	r1, #128
+ 244 0020 2046     		mov	r0, r4
+ 245 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 246              	.LVL11:
+ 133:Src/gpio.c    ****   HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_RESET);
+ 247              		.loc 1 133 0
+ 248 0026 0022     		movs	r2, #0
+ 249 0028 4FF48071 		mov	r1, #256
+ 250 002c 2046     		mov	r0, r4
+ 251 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 252              	.LVL12:
+ 134:Src/gpio.c    **** }
+ 253              		.loc 1 134 0
+ 254 0032 10BD     		pop	{r4, pc}
+ 255              	.L14:
+ 256              		.align	2
+ 257              	.L13:
+ 258 0034 00080240 		.word	1073874944
+ 259              		.cfi_endproc
+ 260              	.LFE128:
+ 262              		.section	.text.All_LED_OFF,"ax",%progbits
+ 263              		.align	1
+ 264              		.global	All_LED_OFF
+ 265              		.syntax unified
+ 266              		.thumb
+ 267              		.thumb_func
+ 268              		.fpu fpv4-sp-d16
+ 270              	All_LED_OFF:
+ 271              	.LFB129:
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 8
+
+
+ 135:Src/gpio.c    **** 
+ 136:Src/gpio.c    **** /****************************************************************************************
+ 137:Src/gpio.c    ****  * outline  : turn off all led
+ 138:Src/gpio.c    ****  * argument : void
+ 139:Src/gpio.c    ****  * return   : void
+ 140:Src/gpio.c    **** ********************************************************************************************/
+ 141:Src/gpio.c    **** void All_LED_OFF(void)
+ 142:Src/gpio.c    **** {
+ 272              		.loc 1 142 0
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 0
+ 275              		@ frame_needed = 0, uses_anonymous_args = 0
+ 276 0000 10B5     		push	{r4, lr}
+ 277              	.LCFI5:
+ 278              		.cfi_def_cfa_offset 8
+ 279              		.cfi_offset 4, -8
+ 280              		.cfi_offset 14, -4
+ 143:Src/gpio.c    ****   HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_SET);
+ 281              		.loc 1 143 0
+ 282 0002 0C4C     		ldr	r4, .L17
+ 283 0004 0122     		movs	r2, #1
+ 284 0006 4FF40051 		mov	r1, #8192
+ 285 000a 2046     		mov	r0, r4
+ 286 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 287              	.LVL13:
+ 144:Src/gpio.c    ****   HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_SET);
+ 288              		.loc 1 144 0
+ 289 0010 0122     		movs	r2, #1
+ 290 0012 4FF48041 		mov	r1, #16384
+ 291 0016 2046     		mov	r0, r4
+ 292 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 293              	.LVL14:
+ 145:Src/gpio.c    ****   HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_SET);
+ 294              		.loc 1 145 0
+ 295 001c 0122     		movs	r2, #1
+ 296 001e 8021     		movs	r1, #128
+ 297 0020 2046     		mov	r0, r4
+ 298 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 299              	.LVL15:
+ 146:Src/gpio.c    ****   HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_SET);
+ 300              		.loc 1 146 0
+ 301 0026 0122     		movs	r2, #1
+ 302 0028 4FF48071 		mov	r1, #256
+ 303 002c 2046     		mov	r0, r4
+ 304 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 305              	.LVL16:
+ 147:Src/gpio.c    **** }
+ 306              		.loc 1 147 0
+ 307 0032 10BD     		pop	{r4, pc}
+ 308              	.L18:
+ 309              		.align	2
+ 310              	.L17:
+ 311 0034 00080240 		.word	1073874944
+ 312              		.cfi_endproc
+ 313              	.LFE129:
+ 315              		.section	.text.LED_Control,"ax",%progbits
+ 316              		.align	1
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 9
+
+
+ 317              		.global	LED_Control
+ 318              		.syntax unified
+ 319              		.thumb
+ 320              		.thumb_func
+ 321              		.fpu fpv4-sp-d16
+ 323              	LED_Control:
+ 324              	.LFB130:
+ 148:Src/gpio.c    **** 
+ 149:Src/gpio.c    **** void LED_Control(unsigned char pattern){
+ 325              		.loc 1 149 0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 329              	.LVL17:
+ 330 0000 10B5     		push	{r4, lr}
+ 331              	.LCFI6:
+ 332              		.cfi_def_cfa_offset 8
+ 333              		.cfi_offset 4, -8
+ 334              		.cfi_offset 14, -4
+ 150:Src/gpio.c    ****   if(pattern == 0) All_LED_OFF();
+ 335              		.loc 1 150 0
+ 336 0002 0446     		mov	r4, r0
+ 337 0004 18B3     		cbz	r0, .L30
+ 338              	.LVL18:
+ 339              	.L20:
+ 151:Src/gpio.c    ****   if((pattern & 0b0001) == 0b0001) HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_RESET);
+ 340              		.loc 1 151 0
+ 341 0006 14F0010F 		tst	r4, #1
+ 342 000a 23D0     		beq	.L21
+ 343              		.loc 1 151 0 is_stmt 0 discriminator 1
+ 344 000c 0022     		movs	r2, #0
+ 345 000e 4FF40051 		mov	r1, #8192
+ 346 0012 1E48     		ldr	r0, .L32
+ 347 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 348              	.LVL19:
+ 349              	.L22:
+ 152:Src/gpio.c    ****   else                             HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_SET);
+ 153:Src/gpio.c    ****   if((pattern & 0b0010) == 0b0010) HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_RESET);
+ 350              		.loc 1 153 0 is_stmt 1
+ 351 0018 14F0020F 		tst	r4, #2
+ 352 001c 21D0     		beq	.L23
+ 353              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 354 001e 0022     		movs	r2, #0
+ 355 0020 4FF48041 		mov	r1, #16384
+ 356 0024 1948     		ldr	r0, .L32
+ 357 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 358              	.LVL20:
+ 359              	.L24:
+ 154:Src/gpio.c    ****   else                             HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_SET);
+ 155:Src/gpio.c    ****   if((pattern & 0b0100) == 0b0100) HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_RESET);
+ 360              		.loc 1 155 0 is_stmt 1
+ 361 002a 14F0040F 		tst	r4, #4
+ 362 002e 1FD0     		beq	.L25
+ 363              		.loc 1 155 0 is_stmt 0 discriminator 1
+ 364 0030 0022     		movs	r2, #0
+ 365 0032 8021     		movs	r1, #128
+ 366 0034 1548     		ldr	r0, .L32
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 10
+
+
+ 367 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 368              	.LVL21:
+ 369              	.L26:
+ 156:Src/gpio.c    ****   else                             HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_SET);
+ 157:Src/gpio.c    ****   if((pattern & 0b1000) == 0b1000) HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_RESET);
+ 370              		.loc 1 157 0 is_stmt 1
+ 371 003a 14F0080F 		tst	r4, #8
+ 372 003e 1DD1     		bne	.L31
+ 158:Src/gpio.c    ****   else                             HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_SET);
+ 373              		.loc 1 158 0
+ 374 0040 0122     		movs	r2, #1
+ 375 0042 4FF48071 		mov	r1, #256
+ 376 0046 1148     		ldr	r0, .L32
+ 377 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 378              	.LVL22:
+ 379              	.L19:
+ 159:Src/gpio.c    **** }
+ 380              		.loc 1 159 0
+ 381 004c 10BD     		pop	{r4, pc}
+ 382              	.LVL23:
+ 383              	.L30:
+ 150:Src/gpio.c    ****   if((pattern & 0b0001) == 0b0001) HAL_GPIO_WritePin(led0_GPIO_Port,led0_Pin,GPIO_PIN_RESET);
+ 384              		.loc 1 150 0 discriminator 1
+ 385 004e FFF7FEFF 		bl	All_LED_OFF
+ 386              	.LVL24:
+ 387 0052 D8E7     		b	.L20
+ 388              	.L21:
+ 152:Src/gpio.c    ****   if((pattern & 0b0010) == 0b0010) HAL_GPIO_WritePin(led1_GPIO_Port,led1_Pin,GPIO_PIN_RESET);
+ 389              		.loc 1 152 0
+ 390 0054 0122     		movs	r2, #1
+ 391 0056 4FF40051 		mov	r1, #8192
+ 392 005a 0C48     		ldr	r0, .L32
+ 393 005c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 394              	.LVL25:
+ 395 0060 DAE7     		b	.L22
+ 396              	.L23:
+ 154:Src/gpio.c    ****   if((pattern & 0b0100) == 0b0100) HAL_GPIO_WritePin(led2_GPIO_Port,led2_Pin,GPIO_PIN_RESET);
+ 397              		.loc 1 154 0
+ 398 0062 0122     		movs	r2, #1
+ 399 0064 4FF48041 		mov	r1, #16384
+ 400 0068 0848     		ldr	r0, .L32
+ 401 006a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 402              	.LVL26:
+ 403 006e DCE7     		b	.L24
+ 404              	.L25:
+ 156:Src/gpio.c    ****   if((pattern & 0b1000) == 0b1000) HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_RESET);
+ 405              		.loc 1 156 0
+ 406 0070 0122     		movs	r2, #1
+ 407 0072 8021     		movs	r1, #128
+ 408 0074 0548     		ldr	r0, .L32
+ 409 0076 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 410              	.LVL27:
+ 411 007a DEE7     		b	.L26
+ 412              	.L31:
+ 157:Src/gpio.c    ****   else                             HAL_GPIO_WritePin(led3_GPIO_Port,led3_Pin,GPIO_PIN_SET);
+ 413              		.loc 1 157 0 discriminator 1
+ 414 007c 0022     		movs	r2, #0
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 11
+
+
+ 415 007e 4FF48071 		mov	r1, #256
+ 416 0082 0248     		ldr	r0, .L32
+ 417 0084 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 418              	.LVL28:
+ 419 0088 E0E7     		b	.L19
+ 420              	.L33:
+ 421 008a 00BF     		.align	2
+ 422              	.L32:
+ 423 008c 00080240 		.word	1073874944
+ 424              		.cfi_endproc
+ 425              	.LFE130:
+ 427              		.text
+ 428              	.Letext0:
+ 429              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 430              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 431              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 432              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 433              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 434              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 435              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 436              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi
+ 437              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
+ 438              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 439              		.file 12 "Inc/global.h"
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 gpio.c
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:18     .text.MX_GPIO_Init:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:25     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:153    .text.MX_GPIO_Init:000000b4 $d
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:161    .text.Push:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:168    .text.Push:00000000 Push
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:205    .text.Push:00000020 $d
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:210    .text.All_LED_ON:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:217    .text.All_LED_ON:00000000 All_LED_ON
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:258    .text.All_LED_ON:00000034 $d
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:263    .text.All_LED_OFF:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:270    .text.All_LED_OFF:00000000 All_LED_OFF
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:311    .text.All_LED_OFF:00000034 $d
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:316    .text.LED_Control:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:323    .text.LED_Control:00000000 LED_Control
+C:\Users\kotaro\AppData\Local\Temp\ccyEI8Ln.s:423    .text.LED_Control:0000008c $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init
+HAL_GPIO_ReadPin
