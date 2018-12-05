@@ -210,7 +210,7 @@ void Control_Wall(void){
     wall_dif = (sen_l.now - 573 ) - (sen_r.now - 670 );
     wall_pid = (int16_t)(0.1f * (float)wall_dif);
 
-    printf("%d\t%d\r\n",wall_pid,sen_r.now);
+    printf("%d\t%d\t%d\t%d\t%d\r\n",sen_l.now,sen_fl.now,sen_front.now,sen_fr.now,sen_r.now);
 }
 
 void Control_pwm(void){
