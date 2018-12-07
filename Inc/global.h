@@ -54,7 +54,7 @@
 #define Y_MAX_VELOCITY 380//[degree/s]
 
 //adc
-#define ADC_CONVERT_DATA_SIZE 8
+#define ADC_CONVERT_DATA_SIZE 4
 
 
 /***typedef**************************************************************************/

@@ -96,9 +96,11 @@ void getADSensor( int16_t *adcount )
 
       HAL_GPIO_WritePin( paluse2_GPIO_Port, paluse2_Pin ,GPIO_PIN_SET );
       HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_SET );
-      for( i = 0; i < 100; i++ ){
+      /*
+      for( i = 0; i < 50; i++ ){
 
       }
+      */
 
       *adcount = LEFT_VALUE;
 
@@ -121,10 +123,11 @@ void getADSensor( int16_t *adcount )
 
       HAL_GPIO_WritePin( paluse0_GPIO_Port, paluse0_Pin ,GPIO_PIN_SET );
       HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_SET );
-      for( i = 0; i < 100; i++ ){
+      /*
+      for( i = 0; i < 50; i++ ){
 
       }
-
+      */
       *adcount = RIGHT_VALUE;
 
       HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
@@ -143,6 +146,83 @@ void getADSensor( int16_t *adcount )
 
       sen_r.diff = sen_r.now - (ADCOntData[1] - ADCOffData[1]);
       sen_r.now = ADCOntData[1] - ADCOffData[1];
+    /*
+      for( i = 0; i < 50; i++ ){
+
+      }
+    */
+      *adcount = FINISH_CONVERT;
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void getADSensor2( int16_t *adcount )
+{
+  volatile int i;
+  switch( *adcount ) {
+    case OFF_VALUE:
+      HAL_ADC_Stop_DMA( &hadc1 );
+      ADCOffData[0] = ADCBuff[0];
+      ADCOffData[1] = ADCBuff[1];
+      ADCOffData[2] = ADCBuff[2];
+      ADCOffData[3] = ADCBuff[3];
+
+      HAL_GPIO_WritePin( paluse0_GPIO_Port, paluse0_Pin ,GPIO_PIN_SET );
+      HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_SET );
+      
+      for( i = 0; i < 100; i++ ){
+
+      }
+
+      *adcount = RIGHT_VALUE;
+
+      HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+      break;
+
+
+    case RIGHT_VALUE:
+      HAL_ADC_Stop_DMA( &hadc1 );
+      HAL_GPIO_WritePin( paluse0_GPIO_Port, paluse0_Pin ,GPIO_PIN_RESET );
+      HAL_GPIO_WritePin( paluse1_GPIO_Port, paluse1_Pin ,GPIO_PIN_RESET );
+      
+
+      ADCOntData[0] = ADCBuff[0];
+      ADCOntData[1] = ADCBuff[1];
+
+      sen_fr.diff = sen_fr.now - (ADCOntData[0] - ADCOffData[0]);
+      sen_fr.now = ADCOntData[0] - ADCOffData[0];
+
+      sen_r.diff = sen_r.now - (ADCOntData[1] - ADCOffData[1]);
+      sen_r.now = ADCOntData[1] - ADCOffData[1];
+
+      HAL_GPIO_WritePin( paluse2_GPIO_Port, paluse2_Pin ,GPIO_PIN_SET );
+      HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_SET );
+    
+      for( i = 0; i < 100; i++ ){
+
+      }
+      *adcount = LEFT_VALUE;
+      HAL_ADC_Start_DMA( &hadc1, (uint32_t *)ADCBuff, sizeof(ADCBuff) );
+      break;
+
+    case LEFT_VALUE:
+      HAL_ADC_Stop_DMA( &hadc1 );
+      HAL_GPIO_WritePin( paluse2_GPIO_Port, paluse2_Pin ,GPIO_PIN_RESET );
+      HAL_GPIO_WritePin( paluse3_GPIO_Port, paluse3_Pin ,GPIO_PIN_RESET );
+      
+
+      ADCOntData[2] = ADCBuff[2];
+      ADCOntData[3] = ADCBuff[3];
+
+      sen_l.diff = sen_l.now - (ADCOntData[2] - ADCOffData[2]);
+      sen_l.now = ADCOntData[2] - ADCOffData[2];
+
+      sen_fl.diff = sen_fl.now - (ADCOntData[3] - ADCOffData[3]);
+      sen_fl.now = ADCOntData[3] - ADCOffData[3];
 
       *adcount = FINISH_CONVERT;
       break;

@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccMFpwTW.s 			page 1
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccRlSM1e.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -18,9 +18,9 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccMFpwTW.s 			page 1
   15              	.Ltext0:
   16              		.cfi_sections	.debug_frame
   17              		.comm	adc_counter,2,2
-  18              		.comm	ADCOntData,16,4
-  19              		.comm	ADCOffData,16,4
-  20              		.comm	ADCBuff,16,4
+  18              		.comm	ADCOntData,8,4
+  19              		.comm	ADCOffData,8,4
+  20              		.comm	ADCBuff,8,4
   21              		.comm	sen_r,14,4
   22              		.comm	sen_l,14,4
   23              		.comm	sen_fr,14,4
@@ -32,7 +32,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccMFpwTW.s 			page 1
   29              		.comm	decrease_T,2,2
   30              		.comm	constant_T,2,2
   31              		.comm	accel_T,2,2
-  32              		.comm	loger,40000,4
+  32              		.comm	loger,44000,4
   33              		.comm	motor,8,4
   34              		.comm	yawrate_cnt,2,2
   35              		.comm	straight_cnt,2,2
@@ -54,15 +54,15 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccMFpwTW.s 			page 1
   51              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
   52              		.file 7 "Inc/global.h"
   53              		.file 8 "Src/global.c"
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccMFpwTW.s 			page 2
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccRlSM1e.s 			page 2
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 global.c
                             *COM*:00000002 adc_counter
-                            *COM*:00000010 ADCOntData
-                            *COM*:00000010 ADCOffData
-                            *COM*:00000010 ADCBuff
+                            *COM*:00000008 ADCOntData
+                            *COM*:00000008 ADCOffData
+                            *COM*:00000008 ADCBuff
                             *COM*:0000000e sen_r
                             *COM*:0000000e sen_l
                             *COM*:0000000e sen_fr
@@ -74,7 +74,7 @@ DEFINED SYMBOLS
                             *COM*:00000002 decrease_T
                             *COM*:00000002 constant_T
                             *COM*:00000002 accel_T
-                            *COM*:00009c40 loger
+                            *COM*:0000abe0 loger
                             *COM*:00000008 motor
                             *COM*:00000002 yawrate_cnt
                             *COM*:00000002 straight_cnt

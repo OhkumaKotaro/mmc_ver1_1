@@ -275,7 +275,8 @@ void Sensor_Mode(void){
     while(1){
         adcStart();
         Sensor_Check();
-        printf("left:%d front:%d right:%d\r",sen_l.now,sen_front.now,sen_r.now);
+        //printf("left:%d front:%d right:%d\r",sen_l.now,sen_front.now,sen_r.now);
+        Control_Wall();
         if(Push()==ON){
             Output_Buzzer(HZ_A);
             break;

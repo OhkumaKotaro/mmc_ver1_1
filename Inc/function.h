@@ -19,6 +19,7 @@ void adcStart( void );
 void adcCheckConvert( void );
 void update_sensor_data( void );
 void getADSensor( int16_t *adcount );
+void getADSensor2( int16_t *adcount );
 void setSensorConstant( sensor_t *sen, int16_t reference, int16_t threshold );
 #ifdef __cplusplus
  }

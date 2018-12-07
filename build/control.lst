@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
   23:Src/control.c ****     error = target - measured;
   34              		.loc 1 23 0
   35 0000 70EE600A 		vsub.f32	s1, s0, s1
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 2
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 2
 
 
   36              	.LVL1:
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
   80              		.loc 1 35 0
   81              		.cfi_startproc
   82              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 3
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 3
 
 
   83              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  125              		.loc 1 49 0
  126 0006 07EE900A 		vmov	s15, r0	@ int
  127 000a F8EEE77A 		vcvt.f32.s32	s15, s15
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 4
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 4
 
 
  128 000e 9FED097A 		vldr.32	s14, .L8
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  170 0006 354C     		ldr	r4, .L15+4
  171 0008 0023     		movs	r3, #0
  172 000a 6362     		str	r3, [r4, #36]	@ float
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 5
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 5
 
 
   64:Src/control.c ****     enc.old_r = 0;
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  211 0052 07EE901A 		vmov	s15, r1	@ int
  212 0056 F8EEE77A 		vcvt.f32.s32	s15, s15
  213 005a 67EE865A 		vmul.f32	s11, s15, s12
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 6
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 6
 
 
  214 005e B6EE005A 		vmov.f32	s10, #5.0e-1
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  256 00b2 144B     		ldr	r3, .L15+44
  257 00b4 4FF08142 		mov	r2, #1082130432
  258 00b8 1A60     		str	r2, [r3]	@ float
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 7
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 7
 
 
   92:Src/control.c ****     encoder_Ki = 10.0f;
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  309              		.align	1
  310              		.global	Straight_Calc_Zero
  311              		.syntax unified
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 8
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 8
 
 
  312              		.thumb
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  102:Src/control.c **** 
  103:Src/control.c **** /****************************************************************************************
  104:Src/control.c ****  * outline  : output pwm for trapezoid accele straight by feadbuck control
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 9
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 9
 
 
  105:Src/control.c ****  * argument : void
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  399 0020 C118     		adds	r1, r0, r3
  400 0022 8A42     		cmp	r2, r1
  401 0024 67DB     		blt	.L29
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 10
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 10
 
 
  122:Src/control.c ****         encoder_l = enc.velocity_l;
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  439 0060 0022     		movs	r2, #0
  440 0062 9A80     		strh	r2, [r3, #4]	@ movhi
  113:Src/control.c ****         calc.velocity = 0;
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 11
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 11
 
 
  441              		.loc 1 113 0
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  486              		.loc 1 145 0
  487 00d8 BDEC048B 		vldm	sp!, {d8-d9}
  488              	.LCFI5:
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 12
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 12
 
 
  489              		.cfi_remember_state
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  536              	.LVL50:
  128:Src/control.c ****         Calc_Palam(-ACCEL,&calc.velocity,&straight_cnt);
  537              		.loc 1 128 0
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 13
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 13
 
 
  538 0112 93ED059A 		vldr.32	s18, [r3, #20]
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  585              		@ link register save eliminated.
  586              	.LVL53:
  587 0000 10B4     		push	{r4}
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 14
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 14
 
 
  588              	.LCFI7:
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  630 0062 07EE103A 		vmov	s14, r3	@ int
  631 0066 B8EEC77A 		vcvt.f32.s32	s14, s14
  632 006a 27EE267A 		vmul.f32	s14, s14, s13
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 15
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 15
 
 
  633 006e 27EE257A 		vmul.f32	s14, s14, s11
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  676 00b6 7047     		bx	lr
  677              	.L36:
  678              		.align	2
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 16
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 16
 
 
  679              	.L35:
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  183:Src/control.c ****  * outline  : call 1ms (control yawrate by feadbuck)
  184:Src/control.c ****  * argument : void
  185:Src/control.c ****  * return   : void
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 17
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 17
 
 
  186:Src/control.c **** ********************************************************************************************/
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  770              		.loc 1 200 0
  771 0034 1E4A     		ldr	r2, .L51
  772 0036 9370     		strb	r3, [r2, #2]
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 18
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 18
 
 
  201:Src/control.c ****             flag.straight = OFF;
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  819 009a 0F49     		ldr	r1, .L51+40
  820 009c 0020     		movs	r0, #0
  821 009e FFF7FEFF 		bl	Calc_Palam
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 19
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 19
 
 
  822              	.LVL70:
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  210:Src/control.c ****     wall_dif = (sen_l.now - 573 ) - (sen_r.now - 670 );
  873              		.loc 1 210 0
  874 0004 144B     		ldr	r3, .L55
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 20
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 20
 
 
  875 0006 B3F90010 		ldrsh	r1, [r3]
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  925 0074 00000000 		.word	.LC0
  926              		.cfi_endproc
  927              	.LFE168:
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 21
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 21
 
 
  929              		.section	.text.Control_pwm,"ax",%progbits
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  970 001e DBB2     		uxtb	r3, r3
  971 0020 012B     		cmp	r3, #1
  972 0022 12D0     		beq	.L65
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 22
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 22
 
 
  973              	.L60:
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1016 0052 1944     		add	r1, r1, r3
  1017              	.LVL91:
  1018 0054 09B2     		sxth	r1, r1
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 23
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 23
 
 
  1019              	.LVL92:
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1065              		.loc 1 242 0
  1066 0018 08BD     		pop	{r3, pc}
  1067              		.cfi_endproc
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 24
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 24
 
 
  1068              	.LFE170:
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1107 001e 0122     		movs	r2, #1
  1108 0020 4FF48041 		mov	r1, #16384
  1109 0024 1848     		ldr	r0, .L81+4
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 25
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 25
 
 
  1110 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1152 0068 074C     		ldr	r4, .L81+4
  1153 006a 0022     		movs	r2, #0
  1154 006c 4FF48071 		mov	r1, #256
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 26
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 26
 
 
  1155 0070 2046     		mov	r0, r4
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1213      09256409 
  1213      25640D0A 
  1213      00
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 27
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 27
 
 
  1214              		.text
@@ -1582,70 +1582,70 @@ ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 1
  1232              		.file 18 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
  1233              		.file 19 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
  1234              		.file 20 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 28
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 28
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 control.c
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:18     .text.PID_value:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:25     .text.PID_value:00000000 PID_value
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:66     .text.PID_value:0000003c $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:71     .text.Integral_value:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:78     .text.Integral_value:00000000 Integral_value
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:101    .text.Integral_value:0000001c $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:106    .text.Calc_Palam:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:113    .text.Calc_Palam:00000000 Calc_Palam
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:142    .text.Calc_Palam:00000034 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:147    .text.Straight_Calc_fb:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:154    .text.Straight_Calc_fb:00000000 Straight_Calc_fb
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:290    .text.Straight_Calc_fb:000000d8 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:18     .text.PID_value:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:25     .text.PID_value:00000000 PID_value
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:66     .text.PID_value:0000003c $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:71     .text.Integral_value:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:78     .text.Integral_value:00000000 Integral_value
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:101    .text.Integral_value:0000001c $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:106    .text.Calc_Palam:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:113    .text.Calc_Palam:00000000 Calc_Palam
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:142    .text.Calc_Palam:00000034 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:147    .text.Straight_Calc_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:154    .text.Straight_Calc_fb:00000000 Straight_Calc_fb
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:290    .text.Straight_Calc_fb:000000d8 $d
                             *COM*:00000004 s_sum_l
                             *COM*:00000001 straight_dir
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:309    .text.Straight_Calc_Zero:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:316    .text.Straight_Calc_Zero:00000000 Straight_Calc_Zero
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:344    .text.Straight_Calc_Zero:0000001c $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:353    .text.Straight_SysTic_fb:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:360    .text.Straight_SysTic_fb:00000000 Straight_SysTic_fb
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:550    .text.Straight_SysTic_fb:00000124 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:309    .text.Straight_Calc_Zero:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:316    .text.Straight_Calc_Zero:00000000 Straight_Calc_Zero
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:344    .text.Straight_Calc_Zero:0000001c $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:353    .text.Straight_SysTic_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:360    .text.Straight_SysTic_fb:00000000 Straight_SysTic_fb
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:550    .text.Straight_SysTic_fb:00000124 $d
                             *COM*:00000002 straight_pid_l
                             *COM*:00000004 s_sum_r
                             *COM*:00000002 straight_pid_r
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:572    .text.Yawrate_Calc_fb:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:579    .text.Yawrate_Calc_fb:00000000 Yawrate_Calc_fb
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:680    .text.Yawrate_Calc_fb:000000b8 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:572    .text.Yawrate_Calc_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:579    .text.Yawrate_Calc_fb:00000000 Yawrate_Calc_fb
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:680    .text.Yawrate_Calc_fb:000000b8 $d
                             *COM*:00000004 y_sum
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:694    .text.Yawrate_Calc_Zero:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:701    .text.Yawrate_Calc_Zero:00000000 Yawrate_Calc_Zero
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:717    .text.Yawrate_Calc_Zero:00000008 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:722    .text.Yawrate_SysTic_fb:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:729    .text.Yawrate_SysTic_fb:00000000 Yawrate_SysTic_fb
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:835    .text.Yawrate_SysTic_fb:000000b0 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:694    .text.Yawrate_Calc_Zero:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:701    .text.Yawrate_Calc_Zero:00000000 Yawrate_Calc_Zero
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:717    .text.Yawrate_Calc_Zero:00000008 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:722    .text.Yawrate_SysTic_fb:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:729    .text.Yawrate_SysTic_fb:00000000 Yawrate_SysTic_fb
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:835    .text.Yawrate_SysTic_fb:000000b0 $d
                             *COM*:00000002 yawrate_pid
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:851    .text.Control_Wall:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:858    .text.Control_Wall:00000000 Control_Wall
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:918    .text.Control_Wall:00000058 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:851    .text.Control_Wall:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:858    .text.Control_Wall:00000000 Control_Wall
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:918    .text.Control_Wall:00000058 $d
                             *COM*:00000002 wall_pid
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:930    .text.Control_pwm:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:937    .text.Control_pwm:00000000 Control_pwm
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1024   .text.Control_pwm:00000058 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1033   .text.Output_Buzzer:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1040   .text.Output_Buzzer:00000000 Output_Buzzer
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1071   .text.Sensor_Check:00000000 $t
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1078   .text.Sensor_Check:00000000 Sensor_Check
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1168   .text.Sensor_Check:00000084 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1194   .bss.encoder_Kd:00000000 encoder_Kd
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1201   .bss.encoder_Ki:00000000 encoder_Ki
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1208   .bss.encoder_Kp:00000000 encoder_Kp
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:930    .text.Control_pwm:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:937    .text.Control_pwm:00000000 Control_pwm
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1024   .text.Control_pwm:00000058 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1033   .text.Output_Buzzer:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1040   .text.Output_Buzzer:00000000 Output_Buzzer
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1071   .text.Sensor_Check:00000000 $t
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1078   .text.Sensor_Check:00000000 Sensor_Check
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1168   .text.Sensor_Check:00000084 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1194   .bss.encoder_Kd:00000000 encoder_Kd
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1201   .bss.encoder_Ki:00000000 encoder_Ki
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1208   .bss.encoder_Kp:00000000 encoder_Kp
                             *COM*:00000004 w_befor
                             *COM*:00000004 w_sum
                             *COM*:00000004 y_sumsum
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1190   .bss.encoder_Kd:00000000 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1197   .bss.encoder_Ki:00000000 $d
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1204   .bss.encoder_Kp:00000000 $d
-ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s 			page 29
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1190   .bss.encoder_Kd:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1197   .bss.encoder_Ki:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1204   .bss.encoder_Kp:00000000 $d
+ARM GAS  C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s 			page 29
 
 
-C:\Users\kotaro\AppData\Local\Temp\ccsoEIPc.s:1211   .rodata.Control_Wall.str1.4:00000000 $d
+C:\Users\kotaro\AppData\Local\Temp\ccCJQReZ.s:1211   .rodata.Control_Wall.str1.4:00000000 $d
 
 UNDEFINED SYMBOLS
 calc

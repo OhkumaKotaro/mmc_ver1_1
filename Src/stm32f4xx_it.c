@@ -217,6 +217,7 @@ void SysTick_Handler(void)
     gyro.befor=0;
   }
 
+/*
   if(flag.wall==ON){
     Control_Wall();
     
@@ -224,7 +225,7 @@ void SysTick_Handler(void)
     wall_pid = 0;
     count_1m=0;
   }
-
+*/
   //Control_pwm();
 
   sen_l.diff_1ms = sen_l.now - sen_l.befor_1ms;
